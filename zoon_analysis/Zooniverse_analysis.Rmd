@@ -1,0 +1,77 @@
+---
+title: "Read_zooniverse"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r cars}
+library(tidyverse)
+data_1 <- read_delim("first_classifications_last.csv", delim=',',col_types = cols(.default = "c"))
+nb_answers_new <- data_1 %>%
+  group_by(AudioData) %>%
+  count()
+print(paste("Number of clips with at least one annotation:", nrow(nb_answers_new)))
+not_finished_new <- nb_answers_new %>%
+  filter(n<=2)
+print(paste("Number of clips with at least one annotation missing:",nrow(not_finished_new)))
+three_answers_new <- nb_answers_new %>%
+  filter(n==3)
+print(paste("Number of clips with three annotations:",nrow(three_answers_new)))
+
+```
+```{r cars}
+df <- read.csv("first_classifications_last.csv")
+df.sub <- subset(df, Answer != "Junk" | Answer != "Crying" | Answer != "Laughing")
+
+### By Age
+library(dplyr)
+library(ggplot2)
+
+n.can <- as.data.frame(df.sub %>% group_by(Age) %>% filter(Answer == "Canonical") %>% summarise(n.can = n()))
+n.non.can <- as.data.frame(df.sub %>% group_by(Age) %>% filter(Answer == "Non-Canonical") %>% summarise(n.non.can = n()))
+n.tot <- merge(n.can, n.non.can)
+n.tot$ratio.can <- n.tot$n.can/(n.tot$n.can + n.tot$n.non.can)
+n.tot$ratio.non.can <- n.tot$n.non.can/(n.tot$n.can + n.tot$n.non.can)
+
+### CANONICAL
+df.plot <- rbind(data.frame(Age = as.factor(n.tot$Age), Ratio = n.tot$ratio.can, Cat = "Canonical"))
+ggplot(df.plot, aes(fill=Cat, y=Ratio, x=Age)) + 
+  geom_bar(position="dodge", stat="identity")
+
+### NONCANONICAL
+df.plot <- rbind(data.frame(Age = as.factor(n.tot$Age), Ratio = n.tot$ratio.non.can, Cat = "Non-Canonical"))
+ggplot(df.plot, aes(fill=Cat, y=Ratio, x=Age)) + 
+  geom_bar(position="dodge", stat="identity")
+
+###BOTH
+
+df.plot <- rbind(data.frame(Age = as.factor(n.tot$Age), Ratio = n.tot$ratio.can, Cat = "Canonical"),data.frame(Age = as.factor(n.tot$Age), Ratio = n.tot$ratio.non.can, Cat = "Non-Canonical"))
+
+ggplot(df.plot, aes(fill=Cat, y=Ratio, x=Age)) + 
+  geom_bar(position="dodge", stat="identity")
+
+### By Recording (=Child ID)
+n.can <- as.data.frame(df.sub %>% group_by(ChildID) %>% filter(Answer == "Canonical") %>% summarise(n.can = n()))
+n.non.can <- as.data.frame(df.sub %>% group_by(ChildID) %>% filter(Answer == "Non-Canonical") %>% summarise(n.non.can = n()))
+n.tot <- merge(n.can, n.non.can)
+n.tot$ratio.can <- n.tot$n.can/(n.tot$n.can + n.tot$n.non.can)
+n.tot$ratio.non.can <- n.tot$n.non.can/(n.tot$n.can + n.tot$n.non.can)
+df.plot <- rbind(data.frame(ChildID = as.factor(n.tot$ChildID), Ratio = n.tot$ratio.can, Cat = "Canonical"),
+                 data.frame(ChildID = as.factor(n.tot$ChildID), Ratio = n.tot$ratio.non.can, Cat = "Non-Canonical"))
+
+ggplot(df.plot, aes(fill=Cat, y=Ratio, x=ChildID)) + 
+  geom_bar(position="dodge", stat="identity")
+```
+
+```{r cars}
+n.can <- as.data.frame(df.sub %>% group_by(Age) %>% filter(Answer == "Canonical") %>% summarise(n.can = n()))
+n.non.can <- as.data.frame(df.sub %>% group_by(Age) %>% filter(Answer == "Non-Canonical") %>% summarise(n.non.can = n()))
+n.tot <- merge(n.can, n.non.can)
+n.tot$ratio.can <- n.tot$n.can/(n.tot$n.can + n.tot$n.non.can)
+n.tot$ratio.non.can <- n.tot$n.non.can/(n.tot$n.can + n.tot$n.non.can)
+plot(ratio.can~Age,data=n.tot)
+abline(lm(ratio.can~Age,data=n.tot))
+```
