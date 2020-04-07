@@ -42,7 +42,7 @@ with open(outfolder+'metadata_praat.txt', 'r') as file:
 		age = line_new[1].split("_")[2]
 		its = "_".join(line_new[1].split("_")[3:6])
 		data[i] = line_new[0]+"\t{}\t{}\t{}\n".format(key, age, its)
-		with open('metadata_praat_new.txt', 'w') as f:
+		with open('metadata_praat_final.txt', 'w') as f:
 			f.writelines(data)
 print("Done.")
 #TODO: add gender
