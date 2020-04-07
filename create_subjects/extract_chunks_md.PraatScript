@@ -28,7 +28,7 @@ procedure CreateName: file$
 			appendFileLine: outfolder$+"metadata_praat.txt", name$, tab$, file$
 		endif
 	endwhile
-    appendInfoLine: "writing to file ",name$
+    #appendInfoLine: "writing to file ",name$
 	Save as WAV file: outfolder$ + name$ + ".wav"
 endproc
 
@@ -66,11 +66,11 @@ for i to nf
 			Extract part... dur_bit/2 dur_bit rectangular 1.0 0
 			@CreateName: ff$
 			Formula (part)... 'dur_bit'-0.01 'dur_bit' 1 2 ('dur_bit'-x)/0.01 * self
-			appendInfoLine: "processed", ff$
+			appendInfoLine: "Finished processing ", ff$
 		else
 			@CreateName: ff$
 			Formula (part)... 'dur_bit'-0.01 'dur_bit' 1 2 ('dur_bit'-x)/0.01 * self
-			appendInfoLine: "processed", ff$
+			appendInfoLine: "Finished processing ", ff$
 		endif
 		#log characteristics
 		#appendFile: "outfolder$ log$", "infolder$ tab$''name$''tab$''f$''tab$''t''tab$''end''newline$'"
