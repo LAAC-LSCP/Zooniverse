@@ -1,11 +1,13 @@
 #Configuration options for extracting chunks and writing metadata
+# Don't forget the "/" at the end of the path!!!
 
 config = {
 	"python":"python",
-	"working_dir": "/scratch2/csemenzin/lena_elisa/", # folder with its and wav files
-    "scripts":"/scratch2/csemenzin/lena_elisa/scripts/", #dir with scripts
-    "praat": "praat", # path to praat exe
-    "infolder": "/scratch2/csemenzin/lena_elisa/output/", # folder to extract first segmentation
-    "outfolder": "/scratch2/csemenzin/lena_elisa/output/extracts/", # folder to extract final clips
-    "metadata_fn":"praat_metadata.txt", # default; not yet implemented - change filename in praat script
+	"working_dir": "/Users/chiarasemenzin/Desktop/create_data/", # working directory
+    "scripts":"/Users/chiarasemenzin/Desktop/create_data/", 
+    "praat": "/Applications/Praat.app/Contents/MacOS/Praat", # path to praat exe
+    "infolder": "/Users/chiarasemenzin/Desktop/create_data/sample_data/", # folder with its and wav files
+    "outfolder": "/Users/chiarasemenzin/Desktop/create_data/sample_data/output/extracts/", # folder to extract output
+    "metadata_fn":"MetaData_prova.txt", # metadata filename
+    "make_folders":False
 }
