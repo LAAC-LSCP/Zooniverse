@@ -9,30 +9,31 @@ working_dir=cfg.config["working_dir"]
 scripts=cfg.config["scripts"]
 infolder=cfg.config["infolder"]
 outfolder=cfg.config["outfolder"]
+md_fn=cfg.config["metadata_fn"]
 praat=cfg.config["praat"]
-#md_fn=cfg.config["metadata_fn"]
-
+#mk_folders=cfg.config["make_folders"]
 print("Started.\nYour settings:")
 for k,v in cfg.config.items():
     print(k,v)
 
 if not os.path.isdir(outfolder):
     print("\nCreating default output folder..."+outfolder)
-    os.system("mkdir "+infolder+"output/")
-    os.system("mkdir "+infolder+"output/"+"extracts/")
+    os.system("cd "+infolder)
+    os.system("mkdir -p {}/output/extracts/".format(infolder))
+    os.system("cd ..")
 #----------------------------------------------------------------------------------------
 # Extract CHN chunks
 print("Extracting CHN chunks from recordings...")
-cmd1="{} {}seg_original.py {} {}".format(python,scripts,working_dir,"def")
+cmd1="{} {}seg_original.py {} {}".format(python,scripts,infolder,"def")
 os.system(cmd1)
 #----------------------------------------------------------------------------------------
 # Extract clips
 print("Trimming clips into 500ms chunks...")
-cmd2="{} --run {}extract_chunks_md.PraatScript {} {}".format(praat,scripts,infolder,outfolder)
+cmd2="{} --run {}extract_chunks_md.PraatScript {} {}".format(praat,scripts,infolder+"/output/",outfolder)
 os.system(cmd2)
 #----------------------------------------------------------------------------------------
 # Write metadata
-print("Writing metadata...")
+print("\nWriting metadata...")
 with open(outfolder+'metadata_praat.txt', 'r') as file:
 	data = file.readlines()
 	for i,line in enumerate(data):
@@ -43,5 +44,5 @@ with open(outfolder+'metadata_praat.txt', 'r') as file:
 		data[i] = line_new[0]+"\t{}\t{}\t{}\n".format(key, age, its)
 		with open('metadata_praat.txt', 'w') as f:
 			f.writelines(data)
-print("Done.")
+print("\nDone.")
 #TODO: add gender
