@@ -1,15 +1,19 @@
 # activate virtualenv
 import os
-os.system("source activate zooniverse")
 
-path="/scratch2/csemenzin/lena_files/output/"
-for d in folders:
-	current_dir=path+d+"/extracts/"
-	print("Create new subject set")
-	os.system("panoptes subject-set create 10073 "+str(current_dir))
-	subj_set = raw_input("What is the subject set number?")
-	os.system("panoptes subject-set upload-subjects "+subj_set) 
-	print("uploading subjects")
+extracts_dir="/scratch2/csemenzin/lena_files/output/extracts/"
+batch_name="default"
+
+os.system("cd {}".format(extracts_dir))
+os.system("printf "Name,Type\n" >> manifest.csv;")
+os.system("for i in *.mp3; do printf "$i,new_lenas\n" >> manifest.csv ; done")
+
+print("Create new subject set")
+os.system("panoptes subject-set create 10073 "+ batch_name))
+subj_set = raw_input("What is the subject set number?")
+os.system("panoptes subject-set upload-subjects "+subj_set+ "manifest.csv")
+
+print("uploading subjects")
 
 #panoptes info
 #assign to variable?
