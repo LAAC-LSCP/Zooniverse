@@ -9,9 +9,9 @@ working_dir=cfg.config["working_dir"]
 scripts=cfg.config["scripts"]
 infolder=cfg.config["infolder"]
 outfolder=cfg.config["outfolder"]
-md_fn=cfg.config["metadata_fn"]
 praat=cfg.config["praat"]
-#mk_folders=cfg.config["make_folders"]
+#md_fn=cfg.config["metadata_fn"]
+
 print("Started.\nYour settings:")
 for k,v in cfg.config.items():
     print(k,v)
