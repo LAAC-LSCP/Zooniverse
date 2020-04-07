@@ -12,8 +12,8 @@ def get_corpus_child_id_from_spreadsheet(sc_file, its_file):
     sc_df = pandas.read_csv(sc_file,encoding = "ISO-8859-1",sep = ';')
     # only retrieve corpus and child id
     basename = its_file.split("/")[-1]
-    print(basename)
-    print(sc_df.columns)
+   # print(basename)
+   # print(sc_df.columns)
     # get csv row with corresponding name
     corresponding_row = sc_df[sc_df['its_filename']==basename]
     # get corresponding child id
@@ -47,7 +47,7 @@ def get_id(its_file):
     rec = re.findall(r'ChildKey=\"[\d\w]*\"', data)
     rec= rec[0].split("=")
     childkey=rec[1].strip('"')
-    print("KEY: ",childkey)
+    #print("KEY: ",childkey)
     return childkey
 
 #_______________________________________________________________________________
@@ -114,7 +114,7 @@ def list_to_csv(list_ts, output_file): # to remember intermediaries
 #_______________________________________________________________________________
 
 def process_one_file(its_files, audio_files, spreadsheet):
-    print(its_files)
+    #print(its_files)
     # get information
     child_id=get_id(its_files[0])
     age_in_days = get_age_in_days(its_files[0])
