@@ -35,6 +35,6 @@ Then simply run:
 python pipeline.py
 ```
 
-The output will be saved in the directory specified in the `outfolder` with:
-* the anonymized clips
-* a meta-data file with clip name, child ID, age and the original recording name.
+The anonymized clips will be saved in the directory specified in the `outfolder`.
+
+The meta-data file with clip name, child ID, age and the original recording name will be saved in the working directory.
