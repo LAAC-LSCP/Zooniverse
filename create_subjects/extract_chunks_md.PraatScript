@@ -1,0 +1,83 @@
+# script to chunk sound files into smaller clips
+
+form Read IO folders 
+	# default path, change in config
+    word infolder /Users/chiarasemenzin/Downloads/wavs/
+    word outfolder /Users/chiarasemenzin/Downloads/wavs/extracts/
+endform
+appendInfoLine: "Input ", infolder$
+appendInfoLine: "Output ", outfolder$
+
+log$="log_tsi.txt"
+#what is the ideal clip length
+chunk=0.4
+#what is the minimum clip duration (clips shorter than that get affixed to the preceding extract
+mindur=0.3
+
+#Def function to generate random name
+
+procedure CreateName: file$
+	foundname$="no"
+	while foundname$="no"
+		name$=string$(randomInteger(1,1000000000))
+		while length(name$) < 10
+			name$="0" + name$
+		endwhile
+		if !fileReadable("outfolder$ name$")
+			foundname$="yes"
+			appendFileLine: outfolder$+"metadata_praat.txt", name$, tab$, file$
+		endif
+	endwhile
+    appendInfoLine: "writing to file ",name$
+	Save as WAV file: outfolder$ + name$ + ".wav"
+endproc
+
+Create Strings as file list: "fileList", infolder$ +"/*.wav"
+nf=Get number of strings
+#process each sound file
+for i to nf
+	select Strings fileList
+	f$=Get string... 'i'
+	Read from file... 'infolder$''f$'
+	ff$=replace$(f$-".wav",".","_",0)
+
+	dur=Get total duration
+	#this loop clips out chunks
+	t=0
+	while t < dur
+		end=t+chunk
+		remains=dur-end
+		if remains < mindur
+			end=dur
+		endif
+
+		select Sound 'ff$'
+		#pause 't' 'end'
+		Extract part... 't' 'end' rectangular 1.0 0
+		#the next two sets of commands get rid of potential edge clicks
+		##do the beginning
+		Formula (part)... 0 0.01 1 2 x/0.01 * self
+		##do the end
+		dur_bit = Get total duration
+		if dur_bit > 0.5
+			Extract part... 0 dur_bit/2 rectangular 1.0 0
+			@CreateName: ff$
+			Formula (part)... 'dur_bit'-0.01 'dur_bit' 1 2 ('dur_bit'-x)/0.01 * self
+			Extract part... dur_bit/2 dur_bit rectangular 1.0 0
+			@CreateName: ff$
+			Formula (part)... 'dur_bit'-0.01 'dur_bit' 1 2 ('dur_bit'-x)/0.01 * self
+			appendInfoLine: "processed", ff$
+		else
+			@CreateName: ff$
+			Formula (part)... 'dur_bit'-0.01 'dur_bit' 1 2 ('dur_bit'-x)/0.01 * self
+			appendInfoLine: "processed", ff$
+		endif
+		#log characteristics
+		#appendFile: "outfolder$ log$", "infolder$ tab$''name$''tab$''f$''tab$''t''tab$''end''newline$'"
+
+		Remove
+		t=end
+	endwhile
+endfor
+
+print done
