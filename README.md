@@ -15,11 +15,11 @@ The pipeline comprises three folders:
 
 Clone or download the repository on your local machine by running:
 ```
-git clone https://github.com/psilonpneuma/Zooniverse.git
+$ git clone https://github.com/psilonpneuma/Zooniverse.git
 ```
 Then navigate to this folder by doing:
 ```
-cd Zooniverse/create_subjects/
+$ cd Zooniverse/create_subjects/
 ```
 
 ### Prerequisites
@@ -50,7 +50,7 @@ Open `upload_subjects.py` and enter the location of your extracted clips, plus a
 Then run:
 
 ```
-./convert_2_mp3.sh
+$ ./convert_2_mp3.sh
 ```
 
 Which will convert your wav files to mp3 for upload.
