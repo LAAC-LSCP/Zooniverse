@@ -15,6 +15,6 @@ os.system("panoptes configure")
 print("Create new subject set")
 os.system("panoptes subject-set create 10073 "+ batch_name)
 subj_set = input("What is the subject set number?")
-os.system("panoptes subject-set upload-subjects "+subj_set+ "manifest.csv")
+os.system("panoptes subject-set upload-subjects "+subj_set+ " manifest.csv")
 
 print("Uploading subjects")
