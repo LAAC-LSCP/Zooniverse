@@ -5,6 +5,7 @@ import os
 
 extracts_dir="path/to/clips/folder/" #where the clips are
 batch_name="default_" #change this to upload batch name to use 
+######### end of change
 
 os.system("cd {}".format(extracts_dir))
 os.system("printf \"Name,Type\n\" >> manifest.csv;")
