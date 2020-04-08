@@ -6,7 +6,7 @@ A pipeline to create, upload and analyse long format recordings using the Zooniv
 
 The pipeline comprises three folders:
 * /create_subjects contains scripts to segment daylong recordings into small chunks (400ms) and write a metadata file.
-* /upload_subjects contains a script to upload data on the zooniverse platform, using the [Panoptes API](https://panoptes.docs.apiary.io/#).
+* /upload_subjects contains a script to upload data on the zooniverse platform, using the [Panoptes API](https://panoptes-python-client.readthedocs.io/en/v1.0/user_guide.html).
 * /zoon_analysis contains scripts to convert Zooniverse data to json format and perform analysis in R.
 
 ## Getting Started
