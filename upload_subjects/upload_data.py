@@ -1,7 +1,9 @@
 # activate virtualenv
 import os
 
-extracts_dir="/Users/chiarasemenzin/Downloads/wavs/" #where the clips are
+###### CHANGE THESE VALUES BEFORE RUNNING
+
+extracts_dir="path/to/clips/folder/" #where the clips are
 batch_name="default_11" #change this to upload batch name to use 
 
 os.system("cd {}".format(extracts_dir))
