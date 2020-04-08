@@ -4,7 +4,7 @@ import os
 ###### CHANGE THESE VALUES BEFORE RUNNING
 
 extracts_dir="path/to/clips/folder/" #where the clips are
-batch_name="default_11" #change this to upload batch name to use 
+batch_name="default_" #change this to upload batch name to use 
 
 os.system("cd {}".format(extracts_dir))
 os.system("printf \"Name,Type\n\" >> manifest.csv;")
