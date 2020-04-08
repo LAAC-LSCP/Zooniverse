@@ -50,7 +50,7 @@ Open `upload_subjects.py` and enter the location of your extracted clips, plus a
 Then run:
 
 ```
-.\convert_2_mp3.sh
+./convert_2_mp3.sh
 ```
 
 Which will convert your wav files to mp3 for upload.
