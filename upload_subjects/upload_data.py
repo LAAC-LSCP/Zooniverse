@@ -13,10 +13,7 @@ print("configure zooniverse credentials: ")
 os.system("panoptes configure")
 
 print("Create new subject set")
-try:
-	os.system("panoptes subject-set create 10073 "+ batch_name)
-except:
-	print(batch_name)
+os.system("panoptes subject-set create 10073 "+ batch_name)
 subj_set = input("What is the subject set number?")
 os.system("panoptes subject-set upload-subjects "+subj_set+ "manifest.csv")
 
