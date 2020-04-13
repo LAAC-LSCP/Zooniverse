@@ -90,6 +90,25 @@ def find_all_chn(its_file, id="CHN"):
             offset = extract_time(seg.attrib['endTime'])
             chi_utt.append([onset, offset])
     return chi_utt
+
+def check_dur(dur):
+    if dur % 0.5 == 0:
+        print(dur,"okay!\n")
+        new_dur=dur
+        remain=0
+    else:
+        print(dur,"\nchanging it")
+        closest_int=int(round(dur))
+        if closest_int>=dur:
+            new_dur=float(closest_int)
+            print("integer was bigger: {}, and duration {}. All good!".format(closest_int,dur))
+        else:
+            print("integer was smaller: {} and duration {}".format(closest_int,dur))
+            print("correcting it!")
+            print(float(closest_int)+0.5)
+            new_dur=float(closest_int)+0.5
+    remain=float(new_dur-dur)
+    return new_dur,remain
 #_______________________________________________________________________________
 
 def create_wav_chunks(timestamps, full_audio, audio_file, corpus, age_in_days, child_id='child_id',its="its"):
@@ -100,10 +119,19 @@ def create_wav_chunks(timestamps, full_audio, audio_file, corpus, age_in_days, c
     # audio_file_id = audio_file.split('/')[-1][:-4]
     for ts in timestamps:
         onset, offset = ts[0], ts[1]
-        # print(ts)
         if len(its_files)>1:
-            print("???",its_files)
+            print("More than one its file! Panic",its_files)
+            sys.quit()
         its_name=str(its_files)[-29:len(str(its_files))-6]
+        difference = float(offset)-float(onset)
+        if difference < 1.0:
+            tgt=1.0-difference
+            onset=float(onset)-tgt/2
+            offset = float(offset) + tgt/2
+        else:
+            new_dur,remain=check_dur(offset-onset)
+            onset=float(onset)-remain/2
+            offset = float(offset) + remain/2
         new_audio_chunk = full_audio[float(onset)*1000:float(offset)*1000]
         new_audio_chunk.export("{}_{}_{}_{}_{}_{}.wav".format(output_dir+corpus, child_id, str(age_in_days),its_name, onset, offset), format("wav"),bitrate="192k")
 #_______________________________________________________________________________
@@ -144,7 +172,8 @@ if __name__ == "__main__":
     TODO: add argparse
     '''
     working_dir = sys.argv[1]
-    spreadsheet = sys.argv[2] # either name of corpus if the files have been renamed or the babblecorpus spreadsheet
+  #  working_dir= "/Users/chiarasemenzin/Desktop/create_temp/sample_data/"
+    spreadsheet = "pd" # either name of corpus if the files have been renamed or the babblecorpus spreadsheet
     processed_files = []
     for filename in sorted(os.listdir(working_dir)):
         if filename.endswith(".its") and filename not in processed_files:
@@ -166,3 +195,5 @@ if __name__ == "__main__":
                     print("file {} does not have its corresponding audio in the same directory - please place all files in the same directory and name .its and .wav file the same way (if the .its file is called blabla.its, the .wav file should be called blabla.wav)".format(audio))
                     continue
             process_one_file(its_files, audio_files, working_dir+'/'+spreadsheet)
+
+
