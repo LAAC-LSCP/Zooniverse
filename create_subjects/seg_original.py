@@ -93,19 +93,19 @@ def find_all_chn(its_file, id="CHN"):
 
 def check_dur(dur):
     if dur % 0.5 == 0:
-        print(dur,"okay!\n")
+        #print(dur,"okay!\n")
         new_dur=dur
         remain=0
     else:
-        print(dur,"\nchanging it")
+        #print(dur,"\nchanging it")
         closest_int=int(round(dur))
         if closest_int>=dur:
             new_dur=float(closest_int)
-            print("integer was bigger: {}, and duration {}. All good!".format(closest_int,dur))
+            #print("integer was bigger: {}, and duration {}. All good!".format(closest_int,dur))
         else:
-            print("integer was smaller: {} and duration {}".format(closest_int,dur))
-            print("correcting it!")
-            print(float(closest_int)+0.5)
+            #print("integer was smaller: {} and duration {}".format(closest_int,dur))
+            #print("correcting it!")
+            #print(float(closest_int)+0.5)
             new_dur=float(closest_int)+0.5
     remain=float(new_dur-dur)
     return new_dur,remain
