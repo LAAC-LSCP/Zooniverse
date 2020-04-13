@@ -18,7 +18,6 @@ cd Zooniverse/create_subjects/
 Minimum requirements: 1.6 gHz intel core (dual) 4GB 1600 MHz DDR3
 
 * Python (preferably 3.7)
-* Praat
 
 Python packages:
 
@@ -38,11 +37,10 @@ Make sure corresponding its and wav files are named in the same way, e.g. if the
 
 Open the configuration file `config.py` in any text editor (e.g. Sublime Text), and specify the local paths:
 
-* "working_dir": this is your working directory
-* "scripts": this is where the scripts are located
-* "praat":  this is the path to the praat app. In MacOs `/Applications/Praat.app/Contents/MacOS/Praat`, in Linux `praat`.
+* "working_dir": this is your working directory, where the scripts are contained
 * "infolder": the folder with its and wav files
-* "outfolder": this is the folder where to extract final clips
+* "outfolder": this is the folder where to extract final clips and the metadata
+* "metadata_fn": name of the metadata file
 
 See the configuration file for examples. Don't forget to put a "/" at the end of each path, and make sure the path does not include spaces.
 
@@ -52,6 +50,6 @@ Then simply run:
 python pipeline.py
 ```
 
-The anonymized clips will be saved in the directory specified in the `outfolder`.
+The anonymized clips and a metadata file with clip name, child ID, age and the original recording name
+will be saved in the directory specified in the `outfolder`.
 
-The meta-data file with clip name, child ID, age and the original recording name will be saved in the working directory.
