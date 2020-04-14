@@ -2,20 +2,23 @@ import os,sys,inspect
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(currentdir)
 sys.path.insert(0,parentdir) 
-import config as cfg
+import config
 
 # ----------------------------------------------------------------------------------------
 # Import config settings
 
-python = cfg.config["python"]
-working_dir = cfg.config["working_dir"]
-infolder = cfg.config["infolder"]
-outfolder = cfg.config["outfolder"]
-metadata=cfg.config["metadata_fn"]
+python = config.python
+working_dir = config.working_dir
+infolder = config.infolder
+outfolder = config.outfolder
+metadata=config.metadata_fn
 
 print("Started.\nYour settings:")
-for k, v in cfg.config.items():
-    print(k, v)
+print(python)
+print(working_dir)
+print(infolder)
+print(outfolder)
+print(metadata)
 print("\n")
 
 if not os.path.isdir(outfolder):

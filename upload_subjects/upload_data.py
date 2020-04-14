@@ -1,12 +1,14 @@
 # activate virtualenv
-import os
+import os,sys,inspect
+currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parentdir = os.path.dirname(currentdir)
+sys.path.insert(0,parentdir) 
+import config as cfg
 
-###### CHANGE THESE VALUES BEFORE RUNNING!
 
-extracts_dir="path/to/clips/folder/" #where the clips are
-batch_name="default_" #change this to upload batch name to use. Cannot use the same name twice
 
-######### end of change
+extracts_dir=cfg.config["outfolder"] #where the clips are
+batch_name=cfg.config["batch_name"] 
 
 os.system("cd {}".format(extracts_dir))
 os.system("printf \"Name,Type\n\" >> manifest.csv;")
