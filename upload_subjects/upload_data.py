@@ -1,10 +1,11 @@
 # activate virtualenv
 import os
 
-###### CHANGE THESE VALUES BEFORE RUNNING
+###### CHANGE THESE VALUES BEFORE RUNNING!
 
 extracts_dir="path/to/clips/folder/" #where the clips are
-batch_name="default_" #change this to upload batch name to use 
+batch_name="default_" #change this to upload batch name to use. Cannot use the same name twice
+
 ######### end of change
 
 os.system("cd {}".format(extracts_dir))
