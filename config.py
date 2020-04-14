@@ -16,7 +16,7 @@ outfolder =  "/Users/acristia/Documents/PNG-data-for-upload/"
 metadata_fn = "MetaData_LAAC_2019png_postCristia1.txt"
 # metadata filename, choose anything you'd like since it will be created in the process
 
-batch_name = "LAAC_2019png_postCristia1"
+batch_name = "LAAC_2019png_postCristia1b"
 #name that will be used to label the batch during uploading, choose anything you want as long as there are no spaces and it is unique (i.e., it will not have been used by you or any others in the past). NOTE! You cannot use the same name twice (i.e., for two subsequent uploads).
 
 
