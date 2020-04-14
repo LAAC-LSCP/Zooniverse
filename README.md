@@ -25,7 +25,6 @@ $ cd Zooniverse/create_subjects/
 Minimum requirements: 1.6 gHz intel core (dual) 4GB 1600 MHz DDR3
 
 * Python (preferably 3.7)
-* Praat
 * Panoptes API
 * R Studio
 
