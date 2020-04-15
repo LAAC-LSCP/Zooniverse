@@ -1,6 +1,8 @@
 # Zooniverse Pipeline for Long Format Recordings
 
 A pipeline to create, upload and analyse long format recordings using the Zooniverse citizen science platform.
+In order to start contributing, you first have to be part of our project The Maturity of Baby Sounds (https://www.zooniverse.org/projects/chiarasemenzin/maturity-of-baby-sounds).
+
 
 ## Description
 
