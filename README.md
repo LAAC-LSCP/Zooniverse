@@ -1,8 +1,19 @@
 # Zooniverse Pipeline for Long Format Recordings
 
 A pipeline to create, upload and analyse long format recordings using the Zooniverse citizen science platform.
-In order to start contributing, you first have to be part of our project The Maturity of Baby Sounds (https://www.zooniverse.org/projects/chiarasemenzin/maturity-of-baby-sounds).
 
+We have an open project aimed at adding vocal maturity labels to segments LENA labeled as being key child in Zooniverse (https://www.zooniverse.org/projects/chiarasemenzin/maturity-of-baby-sounds).
+
+If you would like your data labeled, here is what you'd need to do.
+1. Get in touch with us, so we know you are interested! (authors contacts at the bottom of this README)
+2. Have someone trustworthy & with some coding skills process your LENA data using these instructions.
+3. When you are done, this will have generated a meta-data file, containing the linkage between the original .its and the ~250 500-ms clips/child. Keep the metadata safe - without it, you won't be able to interpret your results!
+4. Have your RA create an account on zooniverse for them and yourself, & provide the authors with both handles. This person should first update the team section to add you (have ready a picture and a blurb). They can also add your institution's logo if you'd like.
+5. They will then follow the instructions here to push up your data.
+6. We also ask you to pitch in and help answer questions in the forum. Please have your assistant look at the forum once a day and reply to at least one comment. 
+7. You can visit the stats section to look at how many annotations are being done.
+Since the process of data generation takes up Zooniverse resources, we'll manage requests and try to not make very many in succession. Please do NOT ask for data to be generated.
+8. When we get data back (every month or so), we'll update it in an OSF repo and let you know. We provide code to derive key analyses, which involve using your meta-data to remove data belonging to other people.
 
 ## Description
 
@@ -58,6 +69,8 @@ We foresee three phases and explain each in turn.
 
 ### 1. Creating files
 
+First, short clips need to be created from the long recording files.
+
 You may need to navigate to the relevant folder by doing:
 ```
 cd Zooniverse/create_subjects/
@@ -74,7 +87,11 @@ The anonymized clips and a metadata file with clip name, child ID, age and the o
 
 ### 2. Upload subjects 
 
-You may need to navigate to the relevant folder by doing:
+Warning: although there is in principle no limit to the number of long files that can be processed in the first stage, the Zooniverse platform guidelines recommend against uploading more than 1000 files at a time. For this reason, the creation of clips and their upload are kept here as two separate stages.
+
+You might need to run the steps in this section more than once.
+
+First, navigate to the relevant folder by doing:
 ```
 cd Zooniverse/upload_subjects/
 ```
@@ -119,3 +136,5 @@ Idx, UserID, AudioData, Answer, Dataset, Question
 
 Chiara Semenzin
 chiara.semenzin@gmail.com
+Alex Cristia
+alecristia@gmail.com
