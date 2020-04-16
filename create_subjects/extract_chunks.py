@@ -42,11 +42,13 @@ def segment(audio,orig_filename):
     chunks = make_chunks(audio, chunk_length_ms)
     # Export all of the individual chunks as wav files
     for i, chunk in enumerate(chunks):
+    # Get rid of edge clicks by fading in and out
+        fade_chunk=chunk.fade_in(10).fade_out(10)
         filename=''.join(random.choices(string.digits, k=10))
         chunk_name = "{}{}.wav".format(outfolder,filename)
         write_metadata(md_filename,filename,orig_filename)
         print("exporting", chunk_name)
-        chunk.export(chunk_name, format="wav")
+        fade_chunk.export(chunk_name, format="wav")
 #_________________________________________
 
 if __name__ == "__main__":
