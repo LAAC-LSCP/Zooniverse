@@ -154,6 +154,8 @@ Uploading subjects  [####################################]  100%
 Uploading subjects
 ```
 
+When the upload is complete, login to Zooniverse and under the "Workflow" section of the Project Builder, tick the name corresponding to your new batch to add it to the current workflow.
+
 At this point you are done! Celebrate as you wish.
 
 * Analysis
