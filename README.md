@@ -139,7 +139,7 @@ username []:
 
 ```
 
-Enter your zooniverse username. Next it will ask for your password. Next time, it will remember both pieces of informaiton and you'll be able to press enter without re-entering them.
+Enter your zooniverse username. Next it will ask for your password. Next time, it will remember both pieces of information and you'll be able to press enter without re-entering them.
 
 Then it will pause again and you will see something like:
 
@@ -175,6 +175,10 @@ After having downloaded the CSV file from the shared OSF repository, launch the 
 ```
 Idx, UserID, AudioData, Answer, Dataset, Question
 ```
+
+* Troubleshooting:
+
+- When uploading, you get `Error: File "Name" could not be found.` and there is no progress bar.
 
 ## Authors
 
