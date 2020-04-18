@@ -35,6 +35,7 @@ Python packages:
 * lxml
 * pandas
 * pydub
+* panoptescli
 
 all packages can be installed with pip:
 ```
