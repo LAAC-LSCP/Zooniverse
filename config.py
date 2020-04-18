@@ -7,16 +7,16 @@ python = "python3"
 working_dir =  "/Users/acristia/Documents/gitrepos/Zooniverse/create_subjects/"
 # working directory, point to the Zooniverse/create_subjects/ you created by cloning this repo
 
-infolder = "/Users/acristia/Documents/PNG-data/"
+infolder = "/Users/acristia/Documents/source-data/"
 # folder with your source its and wav files
 
-outfolder =  "/Users/acristia/Documents/PNG-data-for-upload/"
+outfolder =  "/Users/acristia/Documents/data-for-upload/"
 # folder to extract output to
 
-metadata_fn = "MetaData_LAAC_2019png_postCristia1.txt"
+metadata_fn = "MetaData_LAAC_20200418_ac1.txt"
 # metadata filename, choose anything you'd like since it will be created in the process
 
-batch_name = "LAAC_2019png_postCristia1c"
+batch_name = "LAAC_20200418_ac1"
 #name that will be used to label the batch during uploading, choose anything you want as long as there are no spaces and it is unique (i.e., it will not have been used by you or any others in the past). NOTE! You cannot use the same name twice (i.e., for two subsequent uploads).
 
 
