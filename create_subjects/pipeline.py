@@ -43,12 +43,15 @@ os.system(cmd2)
 print("\nWriting metadata...")
 with open(outfolder + metadata, 'r') as file:
     data = file.readlines()
-    for i, line in enumerate(data):
+    for i, line in enumerate(data[1:]):
         line_new = line.split("\t")
         key = line_new[1].split("_")[1]
         age = line_new[1].split("_")[2]
         its = "_".join(line_new[1].split("_")[3:6])
-        data[i] = line_new[0] + "\t{}\t{}\t{}\n".format(key, age, its)
+        onset=line_new[1].split("_")[6]
+        offset=line_new[1].split("_")[7].strip(".wav")
+        chunk_position=line_new[2]
+        data[i+1] = line_new[0] + "\t{}\t{}\t{}\t{}\t{}\t{}".format(key, age, its,onset,offset,chunk_position)
         with open(outfolder + metadata, 'w') as f:
             f.writelines(data)
 print("Done.")

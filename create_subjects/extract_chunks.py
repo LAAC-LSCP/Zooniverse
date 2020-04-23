@@ -32,27 +32,29 @@ def load_audio(audio):
     fullAudio = AudioSegment.from_wav(audio)
     print("audio loaded in ", datetime.datetime.now()-init, " min.sec.ms")
     return fullAudio
-
-def write_metadata(md_filename,audioname,chunk):
+    
+def write_metadata(md_filename,audioname,chunk,index):
     with open(outfolder+md_filename,"a") as fn:
-        fn.write("{}\t{}\n".format(audioname,chunk))
+        fn.write("{}\t{}\t{}\n".format(audioname,chunk,index))
 
 def segment(audio,orig_filename):
     chunk_length_ms = 0.5 * 1000
     chunks = make_chunks(audio, chunk_length_ms)
-    # Export all of the individual chunks as wav files
+    # Export all of the individual chunks as wav files and write to MD
     for i, chunk in enumerate(chunks):
-    # Get rid of edge clicks by fading in and out
         fade_chunk=chunk.fade_in(10).fade_out(10)
         filename=''.join(random.choices(string.digits, k=10))
         chunk_name = "{}{}.wav".format(outfolder,filename)
-        write_metadata(md_filename,filename,orig_filename)
+        write_metadata(md_filename,filename,orig_filename,i)
         print("exporting", chunk_name)
         fade_chunk.export(chunk_name, format="wav")
 #_________________________________________
 
 if __name__ == "__main__":
     processed_files=[]
+    # write metadata header
+    with open(outfolder + md_filename, "a") as fn:
+        fn.write("{}\t{}\t{}\t{}\t{}\t{}\t{}\n".format("AudioData", "ChildID", "Age", "its", "onset", "offset", "chunk_pos"))
     for filename in sorted(os.listdir(infolder)):
         if filename.endswith(".wav") and filename not in processed_files:
             processed_files.append(filename)
