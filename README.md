@@ -176,9 +176,23 @@ After having downloaded the CSV file from the shared OSF repository, launch the 
 Idx, UserID, AudioData, Answer, Dataset, Question
 ```
 
-* Troubleshooting:
+### Troubleshooting:
 
-- When uploading, you get `Error: File "Name" could not be found.` and there is no progress bar.
+* Recovering your audio files from the metadata and original WAV and ITS files.
+
+To recover the anonymised clips created, in case of loss or deletion, you can run recover_chunks.py. 
+
+The script requires: 
+* A metadata file, as generated from `pipeline.py`
+* The WAV files
+* The (corresponding) ITS files
+
+Usage:
+
+`$ python3 -i /path/to/input/folder -o path/to/output/folder -md /path/to/metadata`
+
+The input folder is where your WAV and ITS files are stored, and the output folder is where the recovered clips will be created.
+
 
 ## Authors
 
