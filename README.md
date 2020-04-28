@@ -42,12 +42,16 @@ all packages can be installed with pip:
 pip install pydub
 ```
 
-
 ## Getting started
 
 Clone or download the repository on your local machine by running:
 ```
 $ git clone https://github.com/psilonpneuma/Zooniverse.git
+```
+To check Python, FFMPEG and required packages installation status run:
+```
+$ cd Zooniverse
+$ python installation_check.py
 ```
 
 ## Setting up the working environment
