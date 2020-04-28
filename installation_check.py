@@ -8,8 +8,10 @@ if vsn[0] != "3":
 
 #FFMPEG version
 ffmpeg = subprocess.check_output(["ffmpeg","-version"])
-print(ffmpeg[0:20].decode("utf-8"))
-
+try:
+	print(ffmpeg[0:20].decode("utf-8"))
+except:
+	print("No installation detected. Run \"pip install ffmpeg\" or visit https://www.ffmpeg.org/download.html")
 #Check packages 
 required=["lxml","pandas","pydub"]
 reqs = subprocess.check_output([sys.executable, '-m', 'pip', 'freeze'])
