@@ -47,8 +47,27 @@ def get_id(its_file):
     rec = re.findall(r'ChildKey=\"[\d\w]*\"', data)
     rec= rec[0].split("=")
     childkey=rec[1].strip('"')
-    #print("KEY: ",childkey)
     return childkey
+
+def get_id_new(its_file):
+    with open(its_file) as f:
+        data = f.read()
+    f.close()
+    rec = re.findall(r'ChildKey=\"[\w]*.*\"', data)
+    childkey=rec[0].split("=")[1].split("\"")[1]
+    return childkey
+
+def get_version(its_file):
+    with open(its_file) as f:
+        data = f.read()
+    f.close()
+    rec = re.findall(r'version=\"[\w]*.*\"', data)
+    vsn=rec[0].split("=")[1].split("\"")[1]
+    if vsn == "5.0.0":
+        vsn = "pro"
+    else:
+        vsn = "old"
+    return vsn
 
 #_______________________________________________________________________________
 
@@ -61,16 +80,18 @@ def load_audio(audio):
     
 #_______________________________________________________________________________
 
-def find_all_chn_amanda(data, id='CHN'):
-    print("finding chn timestamps")
-    list_timestamps = []
-    for i in data:
-        m1 = re.findall(r'spkr=\"CHN\"',i)
-        m2 = re.findall(r'startTime=\"PT([0-9]+\.[0-9]+)S\"', i)
-        m = re.findall(r'endTime=\"PT([0-9]+\.[0-9]+)?S\"', i)
+def find_all_chn_new(its_file, id='CHN'):
+    fileHandler = open(its_file, "r")
+    list_timestamps=[]
+    listOfLines = fileHandler.readlines()
+    for line in listOfLines:
+        m1 = re.findall(r'spkr=\"CHN\"', line)
+        m2 = re.findall(r'startTime=\"PT([0-9]+\.[0-9]+)S\"', line)
+        m = re.findall(r'endTime=\"PT([0-9]+\.[0-9]+)?S\"', line)
         if ((m1 != []) & (m != []) & (m2 != [])):
-            list_timestamps.append([m2[0],m[0]])
-    print("list of chn timestamps complete")
+            list_timestamps.append([m2[0], m[0]])
+    print(len(list_timestamps))
+    fileHandler.close()
     return list_timestamps
 
 def extract_time(text):
@@ -157,8 +178,12 @@ def list_to_csv(list_ts, output_file): # to remember intermediaries
 def process_one_file(its_files, audio_files, spreadsheet):
     #print(its_files)
     # get information
+    vsn = get_version(its_files[0])
     if its_files[0].endswith(".its"):
-        child_id=get_id(its_files[0])
+        if vsn == "pro":
+            child_id=get_id_new(its_files[0])
+        else:
+            child_id=get_id(its_files[0])
         age_in_days = get_age_in_days(its_files[0])
     if its_files[0].endswith(".rttm"):
         child_id="NaN"
@@ -172,7 +197,10 @@ def process_one_file(its_files, audio_files, spreadsheet):
     all_chn_timestamps = []
     for its in its_files:
         if its.endswith(".its"):
-            all_chn_timestamps += find_all_chn(its) # get child timestamps
+            if vsn == "pro":
+                all_chn_timestamps += find_all_chn_new(its)
+            else:
+                all_chn_timestamps += find_all_chn(its) # get child timestamps
         elif its.endswith(".rttm"):
             all_chn_timestamps += find_all_chn_rttm(its) # get child timestamps
     # randomly sample 100 items from the last list
@@ -187,7 +215,7 @@ if __name__ == "__main__":
     '''
     TODO: add argparse
     '''
-  #  working_dir = sys.argv[1]
+   # working_dir = sys.argv[1]
     working_dir= "/Users/chiarasemenzin/Desktop/create_temp/sample_data/"
     spreadsheet = "pd" # either name of corpus if the files have been renamed or the babblecorpus spreadsheet
     processed_files = []
