@@ -215,8 +215,7 @@ if __name__ == "__main__":
     '''
     TODO: add argparse
     '''
-   # working_dir = sys.argv[1]
-    working_dir= "/Users/chiarasemenzin/Desktop/create_temp/sample_data/"
+    working_dir = sys.argv[1]
     spreadsheet = "pd" # either name of corpus if the files have been renamed or the babblecorpus spreadsheet
     processed_files = []
     for filename in sorted(os.listdir(working_dir)):
