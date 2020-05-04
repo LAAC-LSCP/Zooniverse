@@ -111,11 +111,11 @@ def check_dur(dur):
     return new_dur,remain
 #_______________________________________________________________________________
 
-def create_wav_chunks(timestamps, full_audio, audio_file, corpus, age_in_days, child_id='child_id',its="its"):
+def create_wav_chunks(output_dir, timestamps, full_audio, audio_file, corpus, age_in_days, child_id='child_id',its="its"):
     print("creating wav chunks")
-    output_dir = '/'.join(audio_file.split('/')[:-1])+"/output/" # path to the output directory
-    if not os.path.exists(output_dir):
-        os.makedirs(output_dir) # creating the output directory if it does not exist
+ # path to the output directory
+ #   if not os.path.exists(output_dir):
+ #       os.makedirs(output_dir) # creating the output directory if it does not exist
     # audio_file_id = audio_file.split('/')[-1][:-4]
     for ts in timestamps:
         onset, offset = ts[0], ts[1]
@@ -141,7 +141,7 @@ def list_to_csv(list_ts, output_file): # to remember intermediaries
     df.to_csv(output_file) # write dataframe to file
 #_______________________________________________________________________________
 
-def process_one_file(its_files, audio_files, spreadsheet):
+def process_one_file(output_dir,its_files, audio_files, spreadsheet):
     #print(its_files)
     # get information
     child_id=get_id(its_files[0])
@@ -164,7 +164,7 @@ def process_one_file(its_files, audio_files, spreadsheet):
     if len(sys.argv)>2:
         list_to_csv(all_chn_timestamps, its_files[0][:-4]+"_all_chn_timestamps.csv")
         list_to_csv(chn100_timestamps, its_files[0][:-4]+"_chn_100_timestamps.csv")
-    create_wav_chunks(chn100_timestamps, full_audio, audio_files[0], "lenas", age_in_days, child_id,its_files) # create 100 wav chunks
+    create_wav_chunks(output_dir,chn100_timestamps, full_audio, audio_files[0], "lenas", age_in_days, child_id,its_files) # create 100 wav chunks
 #_______________________________________________________________________________
 
 if __name__ == "__main__":
@@ -172,7 +172,8 @@ if __name__ == "__main__":
     TODO: add argparse
     '''
     working_dir = sys.argv[1]
-  #  working_dir= "/Users/chiarasemenzin/Desktop/create_temp/sample_data/"
+   # working_dir= "/Users/chiarasemenzin/Desktop/create_temp/sample_data/"
+    output_dir=sys.argv[2]
     spreadsheet = "pd" # either name of corpus if the files have been renamed or the babblecorpus spreadsheet
     processed_files = []
     for filename in sorted(os.listdir(working_dir)):
@@ -194,6 +195,6 @@ if __name__ == "__main__":
                 if not os.path.exists(audio):
                     print("file {} does not have its corresponding audio in the same directory - please place all files in the same directory and name .its and .wav file the same way (if the .its file is called blabla.its, the .wav file should be called blabla.wav)".format(audio))
                     continue
-            process_one_file(its_files, audio_files, working_dir+'/'+spreadsheet)
+            process_one_file(output_dir,its_files, audio_files, working_dir+'/'+spreadsheet)
 
 

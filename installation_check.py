@@ -14,7 +14,11 @@ except:
 	print("No ffmpeg installation detected. Run \"pip install ffmpeg\" or visit https://www.ffmpeg.org/download.html")
 #Check packages 
 required=["lxml","pandas","pydub"]
-reqs = subprocess.check_output([sys.executable, '-m', 'pip', 'freeze'])
+try:
+	reqs = subprocess.check_output([sys.executable, '-m', 'pip', 'freeze'])
+except subprocess.CalledProcessError as e:
+    print("No version of pip installed.")
+    sys.exit()
 installed_packages = [r.decode().split('==')[0] for r in reqs.split()]
 for pckg in required:
 	if pckg not in installed_packages:

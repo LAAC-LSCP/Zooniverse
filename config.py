@@ -1,17 +1,17 @@
 #Configuration options for extracting chunks and writing metadata
 # IMPORTANT!!! Don't forget to put a "/" at the end of each path, and make sure the path does not include spaces.
 
-python = "python3"
+python = "python"
 #leave it as python if your only python version is python3; or use python3 if you have several so that python3 is used
 
-working_dir =  "/Users/acristia/Documents/gitrepos/Zooniverse/create_subjects/"
-# working directory, point to the Zooniverse/create_subjects/ you created by cloning this repo
-
-infolder = "/Users/acristia/Documents/source-data/"
+infolder = "/Users/chiarasemenzin/Desktop/create_temp/sample_data/"
 # folder with your source its and wav files
 
-outfolder =  "/Users/acristia/Documents/data-for-upload/"
-# folder to extract output to
+outfolder =  "/Users/chiarasemenzin/Documents/Zooniverse-data/"
+# folder where output will be saved 
+# this will create two folders: 
+# - an intermediate/ folder with extracted CHN chunks
+# - a data-for-upload/ folder with the final short clips
 
 metadata_fn = "MetaData_LAAC_20200418_ac1.txt"
 # metadata filename, choose anything you'd like since it will be created in the process

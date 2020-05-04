@@ -8,34 +8,36 @@ import config
 # Import config settings
 
 python = config.python
-working_dir = config.working_dir
 infolder = config.infolder
-outfolder = config.outfolder
 metadata=config.metadata_fn
+working_dir=os.getcwd()+"/"
+
+intermfolder="{}/{}_intermediate/".format(config.outfolder,metadata.strip(".txt"))
+outfolder = "{}/{}_for_upload/".format(config.outfolder,metadata.strip(".txt"))
 
 print("Started.\nYour settings:")
 print(python)
-print(working_dir)
 print(infolder)
 print(outfolder)
 print(metadata)
 print("\n")
 
+if not os.path.isdir(intermfolder):
+    print("Intermediate output folder not found.\nCreating default folder at " + intermfolder)
+    os.system("mkdir -p {}".format(intermfolder))
 if not os.path.isdir(outfolder):
-    print("Output folder not found.\nCreating default output folder at " + outfolder)
-    os.system("cd " + infolder)
+    print("Output folder for final clips not found.\nCreating default extracts folder at " + outfolder)
     os.system("mkdir -p {}".format(outfolder))
-    os.system("cd ..")
 # ----------------------------------------------------------------------------------------
 # Extract CHN chunks
 print("Extracting CHN chunks from recordings...")
-cmd1 = "{} {}seg_original.py {} {}".format(python, working_dir, infolder, "def")
+cmd1 = "{} {}seg_original.py {} {}".format(python, working_dir, infolder, intermfolder, "def")
 os.system(cmd1)
 # ----------------------------------------------------------------------------------------
 
 # Extract clips
 print("Trimming clips into 500ms chunks...")
-cmd2 = "{} {}extract_chunks.py -i {} -o {} -md {}".format(python, working_dir, infolder+"/output/", outfolder,metadata)
+cmd2 = "{} {}extract_chunks.py -i {} -o {} -md {}".format(python, working_dir, intermfolder, outfolder, metadata)
 os.system(cmd2)
 
 # ----------------------------------------------------------------------------------------
