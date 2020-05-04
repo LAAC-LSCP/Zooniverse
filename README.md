@@ -28,21 +28,73 @@ This README assumes you know your way around a Terminal. If you don't, follow a 
 
 Minimum requirements: 1.6 gHz intel core (dual) 4GB 1600 MHz DDR3; 30GB of memory
 
-* Python 3.6 or later required
+* Python 3.6 or later required.
 
-Python packages:
+It is recommended that you run this software within a virtual environment. To set up a Python3 virtualenv follow these steps:
+
+#### 1. Install Python 3
+Find here instructions on how to install Python for 
+[Linux](https://docs.python-guide.org/starting/install3/linux/) ,
+[MacOS](https://docs.python-guide.org/starting/install3/osx/) and 
+[Windows](https://docs.python-guide.org/starting/install3/win/).
+
+#### 2. Create the virtual environment using the venv module included with Python3.
+For example to create one in the local directory called ‘mypython’, type the following:
+
+Mac OS / Linux
+```
+python3 -m venv mypython
+```
+Windows
+```
+py -m venv mypython
+```
+
+#### 3. Activate the virtual environment
+You can activate the python environment by running the following command:
+
+Mac OS / Linux
+```
+source mypython/bin/activate
+```
+Windows
+```
+mypthon\Scripts\activate
+```
+Then you can confirm you’re in the virtual environment by checking the location of your Python interpreter, it should point to the env directory.
+
+On macOS and Linux:
+```
+which python
+.../env/bin/python
+```
+On Windows:
+```
+where python
+.../env/bin/python.exe
+```
+As long as your virtual environment is activated pip will install packages into that specific environment and you’ll be able to import and use packages in your Python application.
+
+If you want to switch projects or otherwise leave your virtual environment, simply run:
+```
+deactivate
+```
+If you want to re-enter the virtual environment just follow the same instructions above about activating a virtual environment. There’s no need to re-create the virtual environment.
+
+Python packages required:
 
 * lxml
 * pandas
 * pydub
 * panoptescli
 
-all packages can be installed with pip:
+all packages can be installed with [pip](https://pip.pypa.io/en/stable/installing/):
 ```
 pip install pydub
 ```
 
 ## Getting started
+
 
 Clone or download the repository on your local machine by running:
 ```
