@@ -111,7 +111,6 @@ $ python installation_check.py
 
 Open the configuration file `config.py` that you will find at the top level of this repository in any text editor (e.g., Sublime Text), and specify the local paths:
 * "python": python interpreter. You can find which version of python you're running by typing `python -V` on your terminal.  If you only have one version of python and it's Python 3, you can write `"python":"python"`. If you have several, including python3, you may be able to call it with `"python":"python3"`. If using a virtual env, enter the path to the environment Python executable (e.g. `/home/attie/projects/thing/venv/bin/python3`).
-* "working_dir": this is the present working directory, created when you cloned the repo, and where the `create_subjects` scripts are contained
 * "infolder": the folder with its and wav files. Make sure corresponding its and wav files are named in the same way, e.g. if the .its file is called e1234.its, the .wav file should be called e1234.wav
 * "outfolder": this is the folder where you want this script to extract final clips and the metadata.
 * "metadata_fn": name of the metadata file; choose anything you'd like since it will be created in the process. We recommend naming it as follows: metadata_LABNAME_DATEISO_INITIALSUPLOADER1 where LABNAME is a short name identifying your lab (it can also be a random name, if you want to mask your data's identity, eg if you only work with one infant population); DATEISO the date in ISO (YYYYMMDD), INITIALSUPLOADER the initials of the person uploading, and a digit.
@@ -139,7 +138,9 @@ Then simply run a command like the following to get started:
 python pipeline.py
 ```
 
-The anonymized clips and a metadata file with clip name, child ID, age and the original recording name will be saved in the directory specified in the `outfolder`.
+At the location specified in `outfolder` in the `config.py file`, the software will create:
+- an `intermediate/` folder with extracted CHN chunks
+- a `data-for-upload/ folder with the final short clips and a metadata file
 
 
 ### 2. Upload subjects 
