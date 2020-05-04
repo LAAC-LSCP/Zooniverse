@@ -28,7 +28,7 @@ This README assumes you know your way around a Terminal. If you don't, follow a 
 
 Minimum requirements: 1.6 gHz intel core (dual) 4GB 1600 MHz DDR3; 30GB of memory
 
-* Python (preferably 3.7)
+* Python 3.6 or later required
 
 Python packages:
 
