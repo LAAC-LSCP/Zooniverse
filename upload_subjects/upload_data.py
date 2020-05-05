@@ -17,8 +17,6 @@ print("\n")
 os.chdir(extracts_dir)
 os.system("printf \"Name,Type\n\" > manifest.csv;")
 os.system("for i in *.mp3; do printf \"$i,lenas\n\" >> manifest.csv ; done")
-print("configure zooniverse credentials: ")
-os.system("panoptes configure")
 
 print("Create new subject set")
 os.system("panoptes subject-set create 10073 "+ batch_name)
