@@ -176,6 +176,20 @@ $ bash convert_2_mp3.sh
 
 Once your files are in mp3 format, check how many you have in the folder. For instance, you can use `ls YOUR_OUT_DIR | wc -l` (making sure to replace YOUR_OUT_DIR with the actual path of the folder where you're staging your uploads). If there are more than 1k files, split them up by creating new directories (e.g., `mkdir YOUR_OUT_DIR2`) and moving excess files there until there are 500-1000 files in each. Since they are numbered randomly, you can split them by the first digit. For instance, if you have 2k files initially, you can do `mv YOUR_OUT_DIR/[45689]*.wav YOUR_OUT_DIR2` to move half of the files to the new directory.
 
+
+To begin the upload, first of all, configure and save your default Zooniverse login details by running:
+```
+$ panoptes configure
+```
+You should see the following output:
+
+```
+endopoint[www.zooniverse.com]
+username []: 
+password []: 
+```
+The endpoint can be left unchanged. Enter your zooniverse username and password. The API will store this information and you will not need to enter it again.
+
 Next, for the first directory with files to upload, run:
 
 ```
@@ -189,14 +203,7 @@ Started.
 Your settings:
 /Users/acristia/Documents/data-for-upload/
 LAAC_20200418_ac1
-
-
-configure zooniverse credentials: 
-username []: 
-
 ```
-
-Enter your zooniverse username. Next it will ask for your password. Next time, it will remember both pieces of information and you'll be able to press enter without re-entering them.
 
 Then it will pause again and you will see something like:
 
