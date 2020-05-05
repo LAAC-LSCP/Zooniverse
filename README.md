@@ -140,7 +140,7 @@ python pipeline.py
 
 At the location specified in `outfolder` in the `config.py file`, the software will create:
 - an `intermediate/` folder with extracted CHN chunks
-- a `data-for-upload/ folder with the final short clips and a metadata file
+- a `data-for-upload/` folder with the final short clips and a metadata file
 
 
 ### 2. Upload subjects 
@@ -188,7 +188,7 @@ endopoint[www.zooniverse.com]
 username []: 
 password []: 
 ```
-The endpoint can be left unchanged. Enter your zooniverse username and password. The API will store this information and you will not need to enter it again.
+The endpoint value can be left unchanged, just press Enter. Type in your zooniverse username and password. The API will store this information and you will not need to enter it again.
 
 Next, for the first directory with files to upload, run:
 
