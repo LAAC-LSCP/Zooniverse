@@ -1,9 +1,8 @@
 import os,sys,inspect
-import config
-
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(currentdir)
 sys.path.insert(0,parentdir) 
+import config
 
 extracts_dir = config.outfolder
 batch_name = config.batch_name 

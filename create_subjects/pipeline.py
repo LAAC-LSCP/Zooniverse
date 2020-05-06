@@ -3,17 +3,16 @@ currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentfram
 parentdir = os.path.dirname(currentdir)
 sys.path.insert(0,parentdir) 
 import config
-
 # ----------------------------------------------------------------------------------------
 # Import config settings
 
 python = config.python
 infolder = config.infolder
-metadata=config.metadata_fn
+metadata="Metadata_{}.txt".format(config.dataset_name)
 working_dir=os.getcwd()+"/"
 
-intermfolder="{}/{}_intermediate/".format(config.outfolder,metadata.strip(".txt"))
-outfolder = "{}/{}_for_upload/".format(config.outfolder,metadata.strip(".txt"))
+intermfolder="{}/{}_intermediate/".format(config.outfolder,config.dataset_name)
+outfolder = "{}/{}_for_upload/".format(config.outfolder,config.dataset_name)
 
 print("Started.\nYour settings:")
 print(python)

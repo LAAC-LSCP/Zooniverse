@@ -8,12 +8,12 @@ infolder = "/Users/chiarasemenzin/Desktop/create_temp/sample_data/"
 # folder with your source its and wav files
 
 outfolder =  "/Users/chiarasemenzin/Documents/Zooniverse-data/"
-# folder where output will be saved 
+# folder where output will be saved. If it does not exist, it will be created in the process.
 # this will create two folders: 
 # - an intermediate/ folder with extracted CHN chunks
 # - a data-for-upload/ folder with the final short clips
 
-metadata_fn = "MetaData_LAAC_20200418_ac1.txt"
+dataset_name = "LAAC_20200418_ac1"
 # metadata filename, choose anything you'd like since it will be created in the process
 
 batch_name = "LAAC_20200418_ac1"
