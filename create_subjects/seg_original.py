@@ -122,7 +122,8 @@ def create_wav_chunks(output_dir, timestamps, full_audio, audio_file, corpus, ag
         if len(its_files)>1:
             print("More than one its file! Panic",its_files)
             sys.quit()
-        its_name=str(its_files)[-29:len(str(its_files))-6]
+        #its_name=str(its_files)[-29:len(str(its_files))-6]
+        its_name = os.path.basename(its_files[0])
         difference = float(offset)-float(onset)
         if difference < 1.0:
             tgt=1.0-difference
