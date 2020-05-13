@@ -11,7 +11,7 @@ dataset_name=config.dataset_name
 extracts_dir=outdir+dataset_name+"_for_upload"
 extracts_batches = glob.glob(extracts_dir+"/*batch*/", recursive=True)
 
-print("Started.\nYour batches:")
+print("Started.")
 
 for batch in extracts_batches:
     os.chdir(batch)
