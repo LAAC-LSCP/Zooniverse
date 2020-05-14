@@ -6,7 +6,7 @@ import config
 # ----------------------------------------------------------------------------------------
 # Import config settings
 
-python = config.python
+python = sys.executable
 infolder = config.infolder
 metadata="Metadata_{}.txt".format(config.dataset_name)
 working_dir=os.path.join(os.getcwd()+os.sep)
