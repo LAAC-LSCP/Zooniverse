@@ -9,7 +9,7 @@ import config
 outdir = config.outfolder
 dataset_name=config.dataset_name
 extracts_dir=outdir+dataset_name+"_for_upload"
-extracts_batches = glob.glob(extracts_dir+"/*batch*/", recursive=True)
+extracts_batches = glob.glob(extracts_dir+os.sep+"*batch*"+os.sep, recursive=True)
 
 print("Started.")
 
