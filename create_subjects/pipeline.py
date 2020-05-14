@@ -9,10 +9,11 @@ import config
 python = config.python
 infolder = config.infolder
 metadata="Metadata_{}.txt".format(config.dataset_name)
-working_dir=os.getcwd()+"/"
+working_dir=os.path.join(os.getcwd()+os.sep)
 
-intermfolder="{}/{}_intermediate/".format(config.outfolder,config.dataset_name)
-outfolder = "{}/{}_for_upload/".format(config.outfolder,config.dataset_name)
+#intermfolder="{}/{}_intermediate/".format(config.outfolder,config.dataset_name)
+intermfolder=os.path.join(config.outfolder,config.dataset_name+"_intermediate"+os.sep)
+outfolder=os.path.join(config.outfolder,config.dataset_name+"_for_upload"+os.sep)
 
 print("Started.\nYour settings:")
 print(python)

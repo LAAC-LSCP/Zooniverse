@@ -42,7 +42,7 @@ def write_metadata(md_filename, audioname, chunk, index):
 # Create folders of max 1000 files
 
 def make_folder(outfolder, batch_idx):
-    batch_outfolder = "{}/{}_batch_{}".format(outfolder, md_filename.split(".")[0].strip("Metadata_"), str(batch_idx))
+    batch_outfolder = os.path.join(outfolder, md_filename.split(".")[0].strip("Metadata_")+"_batch_"+str(batch_idx))
     if not os.path.isdir(batch_outfolder):
         print("Creating batch folder number " + str(batch_idx))
         os.system("mkdir {}".format(batch_outfolder))
@@ -68,7 +68,7 @@ def segment(audio, orig_filename, outfolder, batch_idx):
         fade_chunk = chunk.fade_in(10).fade_out(10)
         filename = ''.join(random.choices(string.digits, k=10))
         batch_outfolder, batch_idx = create_batches(outfolder, batch_idx)
-        chunk_name = "{}/{}.wav".format(batch_outfolder, filename)
+        chunk_name=os.path.join(batch_outfolder,filename+".wav")
         write_metadata(md_filename, filename, orig_filename, i)
         print("exporting", chunk_name)
         fade_chunk.export(chunk_name, format="wav")
@@ -87,5 +87,5 @@ if __name__ == "__main__":
     for filename in sorted(os.listdir(infolder)):
         if filename.endswith(".wav") and filename not in processed_files:
             processed_files.append(filename)
-            full_audio = load_audio(infolder + "/" + filename)
+            full_audio = load_audio(os.path.join(infolder,filename))
             batch_idx = segment(full_audio, filename, outfolder, batch_idx)

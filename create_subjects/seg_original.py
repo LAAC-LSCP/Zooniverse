@@ -101,11 +101,7 @@ def check_dur(dur):
         closest_int=int(round(dur))
         if closest_int>=dur:
             new_dur=float(closest_int)
-            #print("integer was bigger: {}, and duration {}. All good!".format(closest_int,dur))
         else:
-            #print("integer was smaller: {} and duration {}".format(closest_int,dur))
-            #print("correcting it!")
-            #print(float(closest_int)+0.5)
             new_dur=float(closest_int)+0.5
     remain=float(new_dur-dur)
     return new_dur,remain
@@ -113,16 +109,8 @@ def check_dur(dur):
 
 def create_wav_chunks(output_dir, timestamps, full_audio, audio_file, corpus, age_in_days, child_id='child_id',its="its"):
     print("creating wav chunks")
- # path to the output directory
- #   if not os.path.exists(output_dir):
- #       os.makedirs(output_dir) # creating the output directory if it does not exist
-    # audio_file_id = audio_file.split('/')[-1][:-4]
     for ts in timestamps:
         onset, offset = ts[0], ts[1]
-        if len(its_files)>1:
-            print("More than one its file! Panic",its_files)
-            sys.quit()
-        #its_name=str(its_files)[-29:len(str(its_files))-6]
         its_name = os.path.basename(its_files[0])
         difference = float(offset)-float(onset)
         if difference < 1.0:
@@ -149,9 +137,6 @@ def process_one_file(output_dir,its_files, audio_files, spreadsheet):
     age_in_days = get_age_in_days(its_files[0])
     # write metadata
     full_audio = []
-    #    with open("its_info.csv","w") as fp:
-    #    fp.write("{} {} {}".format(str(its_files),str(age_in_days),str(child_id)))
-    # get audio chunks
     for audio in audio_files:
         if len(full_audio)==0:
             full_audio = load_audio(audio)
@@ -173,18 +158,16 @@ if __name__ == "__main__":
     TODO: add argparse
     '''
     working_dir = sys.argv[1]
-   # working_dir= "/Users/chiarasemenzin/Desktop/create_temp/sample_data/"
+    #working_dir= "/Users/chiarasemenzin/Desktop/create_temp/sample_data/"
     output_dir=sys.argv[2]
-    spreadsheet = "pd" # either name of corpus if the files have been renamed or the babblecorpus spreadsheet
+    #output_dir="/Users/chiarasemenzin/Documents/Zooniverse-data/LAAC_20200418_ac1_intermediate/"
+    spreadsheet = "def" # only change if using spreadsheet
     processed_files = []
     for filename in sorted(os.listdir(working_dir)):
         if filename.endswith(".its") and filename not in processed_files:
-            # its_file = sys.argv[1]
             processed_files.append(filename)
-            its_files = [working_dir+"/"+filename] # path to its file (path/to/file.its)
-            # audio_file = sys.argv[2]
-            audio_files = [working_dir+"/"+filename[:-4]+".wav"] # path to audio file (path/to/audio_file.wav)
-
+            its_files = [os.path.join(working_dir,filename)] # path to its file (path/to/file.its)
+            audio_files = [os.path.join(working_dir,filename[:-4]+".wav")] # path to audio file (path/to/audio_file.wav)
             # if there are several files from the same day
             if filename[-6]=='_':
                 for filename_other in os.listdir(working_dir):
@@ -196,6 +179,6 @@ if __name__ == "__main__":
                 if not os.path.exists(audio):
                     print("file {} does not have its corresponding audio in the same directory - please place all files in the same directory and name .its and .wav file the same way (if the .its file is called blabla.its, the .wav file should be called blabla.wav)".format(audio))
                     continue
-            process_one_file(output_dir,its_files, audio_files, working_dir+'/'+spreadsheet)
+            process_one_file(output_dir,its_files, audio_files, os.path.join(working_dir,spreadsheet))
 
 
