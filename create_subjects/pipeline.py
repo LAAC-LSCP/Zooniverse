@@ -3,39 +3,37 @@ currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentfram
 parentdir = os.path.dirname(currentdir)
 sys.path.insert(0,parentdir) 
 import config
-
 # ----------------------------------------------------------------------------------------
 # Import config settings
 
-python = config.python
-working_dir = config.working_dir
+python = sys.executable
 infolder = config.infolder
-outfolder = config.outfolder
-metadata=config.metadata_fn
+metadata="Metadata_{}.txt".format(config.dataset_name)
+working_dir=os.path.join(os.getcwd()+os.sep)
+
+#intermfolder="{}/{}_intermediate/".format(config.outfolder,config.dataset_name)
+intermfolder=os.path.join(config.outfolder,config.dataset_name+"_intermediate"+os.sep)
+outfolder=os.path.join(config.outfolder,config.dataset_name+"_for_upload"+os.sep)
 
 print("Started.\nYour settings:")
 print(python)
-print(working_dir)
 print(infolder)
 print(outfolder)
 print(metadata)
 print("\n")
 
-if not os.path.isdir(outfolder):
-    print("Output folder not found.\nCreating default output folder at " + outfolder)
-    os.system("cd " + infolder)
-    os.system("mkdir -p {}".format(outfolder))
-    os.system("cd ..")
+os.makedirs(intermfolder, exist_ok=True)
+os.makedirs(outfolder, exist_ok=True)
 # ----------------------------------------------------------------------------------------
 # Extract CHN chunks
 print("Extracting CHN chunks from recordings...")
-cmd1 = "{} {}seg_original.py {} {}".format(python, working_dir, infolder, "def")
+cmd1 = "{} {}seg_original.py {} {}".format(python, working_dir, infolder, intermfolder, "def")
 os.system(cmd1)
 # ----------------------------------------------------------------------------------------
 
 # Extract clips
 print("Trimming clips into 500ms chunks...")
-cmd2 = "{} {}extract_chunks.py -i {} -o {} -md {}".format(python, working_dir, infolder+"/output/", outfolder,metadata)
+cmd2 = "{} {}extract_chunks.py -i {} -o {} -md {}".format(python, working_dir, intermfolder, outfolder, metadata)
 os.system(cmd2)
 
 # ----------------------------------------------------------------------------------------

@@ -28,26 +28,82 @@ This README assumes you know your way around a Terminal. If you don't, follow a 
 
 Minimum requirements: 1.6 gHz intel core (dual) 4GB 1600 MHz DDR3; 30GB of memory
 
-* Python (preferably 3.7)
+* Python 3.6 or later required.
 
-Python packages:
+It is recommended that you run this software within a virtual environment. To set up a Python3 virtualenv follow these steps:
+
+#### 1. Install Python 3
+Find here instructions on how to install Python for 
+[Linux](https://docs.python-guide.org/starting/install3/linux/) ,
+[MacOS](https://docs.python-guide.org/starting/install3/osx/) and 
+[Windows](https://docs.python-guide.org/starting/install3/win/).
+
+#### 2. Create the virtual environment using the venv module included with Python3.
+For example to create one in the local directory called ‘mypython’, type the following:
+
+Mac OS / Linux
+```
+python3 -m venv mypython
+```
+Windows
+```
+py -m venv mypython
+```
+
+#### 3. Activate the virtual environment
+You can activate the python environment by running the following command:
+
+Mac OS / Linux
+```
+source mypython/bin/activate
+```
+Windows
+```
+mypthon\Scripts\activate
+```
+Then you can confirm you’re in the virtual environment by checking the location of your Python interpreter, it should point to the env directory.
+
+On macOS and Linux:
+```
+which python
+.../env/bin/python
+```
+On Windows:
+```
+where python
+.../env/bin/python.exe
+```
+As long as your virtual environment is activated pip will install packages into that specific environment and you’ll be able to import and use packages in your Python application.
+
+If you want to switch projects or otherwise leave your virtual environment, simply run:
+```
+deactivate
+```
+If you want to re-enter the virtual environment just follow the same instructions above about activating a virtual environment. There’s no need to re-create the virtual environment.
+
+Python packages required:
 
 * lxml
 * pandas
 * pydub
 * panoptescli
 
-all packages can be installed with pip:
+all packages can be installed with [pip](https://pip.pypa.io/en/stable/installing/):
 ```
 pip install pydub
 ```
 
-
 ## Getting started
+
 
 Clone or download the repository on your local machine by running:
 ```
 $ git clone https://github.com/psilonpneuma/Zooniverse.git
+```
+To check Python, FFMPEG and required packages installation status run:
+```
+$ cd Zooniverse
+$ python installation_check.py
 ```
 
 ## Setting up the working environment
@@ -55,7 +111,6 @@ $ git clone https://github.com/psilonpneuma/Zooniverse.git
 
 Open the configuration file `config.py` that you will find at the top level of this repository in any text editor (e.g., Sublime Text), and specify the local paths:
 * "python": python interpreter. You can find which version of python you're running by typing `python -V` on your terminal.  If you only have one version of python and it's Python 3, you can write `"python":"python"`. If you have several, including python3, you may be able to call it with `"python":"python3"`. If using a virtual env, enter the path to the environment Python executable (e.g. `/home/attie/projects/thing/venv/bin/python3`).
-* "working_dir": this is the present working directory, created when you cloned the repo, and where the `create_subjects` scripts are contained
 * "infolder": the folder with its and wav files. Make sure corresponding its and wav files are named in the same way, e.g. if the .its file is called e1234.its, the .wav file should be called e1234.wav
 * "outfolder": this is the folder where you want this script to extract final clips and the metadata.
 * "metadata_fn": name of the metadata file; choose anything you'd like since it will be created in the process. We recommend naming it as follows: metadata_LABNAME_DATEISO_INITIALSUPLOADER1 where LABNAME is a short name identifying your lab (it can also be a random name, if you want to mask your data's identity, eg if you only work with one infant population); DATEISO the date in ISO (YYYYMMDD), INITIALSUPLOADER the initials of the person uploading, and a digit.
@@ -83,7 +138,9 @@ Then simply run a command like the following to get started:
 python pipeline.py
 ```
 
-The anonymized clips and a metadata file with clip name, child ID, age and the original recording name will be saved in the directory specified in the `outfolder`.
+At the location specified in `outfolder` in the `config.py file`, the software will create:
+- an `intermediate/` folder with extracted CHN chunks
+- a `data-for-upload/` folder with the final short clips and a metadata file
 
 
 ### 2. Upload subjects 
@@ -119,6 +176,20 @@ $ bash convert_2_mp3.sh
 
 Once your files are in mp3 format, check how many you have in the folder. For instance, you can use `ls YOUR_OUT_DIR | wc -l` (making sure to replace YOUR_OUT_DIR with the actual path of the folder where you're staging your uploads). If there are more than 1k files, split them up by creating new directories (e.g., `mkdir YOUR_OUT_DIR2`) and moving excess files there until there are 500-1000 files in each. Since they are numbered randomly, you can split them by the first digit. For instance, if you have 2k files initially, you can do `mv YOUR_OUT_DIR/[45689]*.wav YOUR_OUT_DIR2` to move half of the files to the new directory.
 
+
+To begin the upload, first of all, configure and save your default Zooniverse login details by running:
+```
+$ panoptes configure
+```
+You should see the following output:
+
+```
+endopoint[www.zooniverse.com]
+username []: 
+password []: 
+```
+The endpoint value can be left unchanged, just press Enter. Type in your zooniverse username and password. The API will store this information and you will not need to enter it again.
+
 Next, for the first directory with files to upload, run:
 
 ```
@@ -130,37 +201,15 @@ There will be some text written out, and eventually, the script will pause and y
 $ python upload_data.py 
 Started.
 Your settings:
-/Users/acristia/Documents/data-for-upload/
-LAAC_20200418_ac1
-
-
-configure zooniverse credentials: 
-username []: 
-
+/Users/acristia/Documents/Zooniverse-data/LAAC_20200418_ac1_for_upload/
 ```
-
-Enter your zooniverse username. Next it will ask for your password. Next time, it will remember both pieces of information and you'll be able to press enter without re-entering them.
-
-Then it will pause again and you will see something like:
-
-```
-Create new subject set
-82707 LAAC_20200418_ac1
-What is the subject set number?
-```
-At this point, enter the number printed right above the question; for instance here, it's 82707. (This is the unique subject set number generated by the panoptes API.)
-
-Next, you will see the following progress bar:
+The script will then access the batch folders created in Step 1 (`create_subjects`), using the `outfolder` path specified in the configuration file. It will automatically access the subfolder `for_upload` and loop through the batches, uploading them one at a time.
+As it does so, you will see the batch name being processed, and the following progress bar:
 
 ```
 Uploading subjects  [####################################]  100%          
 Uploading subjects
 ```
-
-Repeat for each directory, making sure to make two changes to your config.py file:
-
-a) change the upload directory
-b) change the batch name by adding a different digit (e.g., if it was LAAC_20200418_ac1, then call it LAAC_20200418_ac2).
 
 **Important** When the upload is complete, go to the (Workflow)[https://www.zooniverse.org/lab/10073/workflows/12193] section of the Project Builder in Zooniverse (you need to be logged in for the direct link to work!), and tick the name(s) corresponding to your new batch(es) to add it to the current workflow.
 
