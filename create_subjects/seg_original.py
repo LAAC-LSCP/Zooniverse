@@ -136,12 +136,10 @@ def process_one_file(output_dir,its_files, audio_files, spreadsheet):
     child_id=get_id(its_files[0])
     age_in_days = get_age_in_days(its_files[0])
     # write metadata
-    full_audio = []
+    full_audio = AudioSegment.empty()
     for audio in audio_files:
-        if len(full_audio)==0:
-            full_audio = load_audio(audio)
-        else:
-            full_audio = full_audio + load_audio(audio) # load each audio and add to full_audio
+        full_audio += load_audio(audio) # load each audio and add to full_audio
+
     all_chn_timestamps = []
     for its in its_files:
         all_chn_timestamps += find_all_chn(its) # get child timestamps

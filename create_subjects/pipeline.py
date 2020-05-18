@@ -6,7 +6,7 @@ import config
 # ----------------------------------------------------------------------------------------
 # Import config settings
 
-python = config.python
+python = sys.executable
 infolder = config.infolder
 metadata="Metadata_{}.txt".format(config.dataset_name)
 working_dir=os.path.join(os.getcwd()+os.sep)
@@ -22,12 +22,8 @@ print(outfolder)
 print(metadata)
 print("\n")
 
-if not os.path.isdir(intermfolder):
-    print("Intermediate output folder not found.\nCreating default folder at " + intermfolder)
-    os.system("mkdir -p {}".format(intermfolder))
-if not os.path.isdir(outfolder):
-    print("Output folder for final clips not found.\nCreating default extracts folder at " + outfolder)
-    os.system("mkdir -p {}".format(outfolder))
+os.makedirs(intermfolder, exist_ok=True)
+os.makedirs(outfolder, exist_ok=True)
 # ----------------------------------------------------------------------------------------
 # Extract CHN chunks
 print("Extracting CHN chunks from recordings...")
