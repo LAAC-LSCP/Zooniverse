@@ -1,4 +1,5 @@
 import os,sys,inspect
+import subprocess
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(currentdir)
 sys.path.insert(0,parentdir) 
@@ -27,8 +28,10 @@ os.makedirs(outfolder, exist_ok=True)
 # ----------------------------------------------------------------------------------------
 # Extract CHN chunks
 print("Extracting CHN chunks from recordings...")
-cmd1 = "{} {}seg_original.py {} {}".format(python, working_dir, infolder, intermfolder, "def")
-os.system(cmd1)
+#cmd1 = "{} {}seg_original.py {} {}".format(python, working_dir, infolder, intermfolder, "def")
+cmd1 = [python, working_dir+"seg_original.py", infolder, intermfolder, "def"]
+process=subprocess.Popen(cmd1,stdout=subprocess.PIPE)
+#os.system(cmd1)
 # ----------------------------------------------------------------------------------------
 
 # Extract clips
