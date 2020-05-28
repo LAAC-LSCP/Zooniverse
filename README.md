@@ -12,8 +12,8 @@ If you would like your data labeled, here is what you'd need to do.
 5. They will then follow the instructions in this README to create subjects and push up your data -- see below.
 6. We also ask the RA to pitch in and help answer questions in the [forum](https://www.zooniverse.org/projects/chiarasemenzin/maturity-of-baby-sounds/talk), at least one comment a day. 
 7. You can visit the [stats section](https://www.zooniverse.org/projects/chiarasemenzin/maturity-of-baby-sounds/stats) to look at how many annotations are being done.
-Since the process of data generation takes up Zooniverse resources, we'll manage requests and try to not make very many in succession. **Please do NOT ask for data to be generated.**
-8. When we get data back (every month or so), we'll update it in an OSF repo and let you know. We provide code to derive key analyses, which involve using your meta-data to remove data belonging to other people.
+8. Yu can request a CSV file with the annotated data from the [Data Exports](https://www.zooniverse.org/lab/10073/data-exportshttps://www.zooniverse.org/lab/10073/data-exports) section of the project builder, under "Request new classification export". A few minutes after your request has been made, a button will appear in this same page that will allow you to download the classifications file. Note that this file contains classifications for the whole project: since this process of data generation takes up Zooniverse resources, **please do not ask for data to be generated more than once every 24 hours.**
+9. In the Analysis folder, we provide code to derive key analyses, which involve using your meta-data to remove data belonging to other people.
 
 ## Description
 
