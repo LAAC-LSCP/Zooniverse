@@ -165,7 +165,7 @@ def list_to_csv(list_ts, output_file): # to remember intermediaries
     df.to_csv(output_file) # write dataframe to file
 #_______________________________________________________________________________
 
-def process_one_file(output_dir,its_files, audio_files, spreadsheet):
+def process_one_file(output_dir,its_files, audio_files, spreadsheet,nr_files):
     #print(its_files)
     # get information
     vsn = get_version(its_files[0])
@@ -178,7 +178,7 @@ def process_one_file(output_dir,its_files, audio_files, spreadsheet):
     if its_files[0].endswith(".rttm"):
         child_id="NaN"
         age_in_days = "NaN"
-    full_audio = []
+    full_audio = AudioSegment.empty()
     for audio in audio_files:
         full_audio += load_audio(audio) # load each audio and add to full_audio
 
@@ -192,19 +192,26 @@ def process_one_file(output_dir,its_files, audio_files, spreadsheet):
         elif its.endswith(".rttm"):
             all_chn_timestamps += find_all_chn_rttm(its) # get child timestamps
     # randomly sample 100 items from the last list
-    chn100_timestamps = random.sample(all_chn_timestamps, min(100,len(all_chn_timestamps)))
+    #chn100_timestamps = random.sample(all_chn_timestamps, min(100,len(all_chn_timestamps)))
     if len(sys.argv)>2:
         list_to_csv(all_chn_timestamps, its_files[0][:-4]+"_all_chn_timestamps.csv")
+    if nr_files == "all":
+        create_wav_chunks(output_dir,all_chn_timestamps, full_audio, audio_files[0], "lenas", age_in_days, child_id,its_files) # create wav chunks for all chunks
+    else:
+        chn100_timestamps = random.sample(all_chn_timestamps, min(int(nr_files),len(all_chn_timestamps)))
         list_to_csv(chn100_timestamps, its_files[0][:-4]+"_chn_100_timestamps.csv")
-    create_wav_chunks(output_dir,chn100_timestamps, full_audio, audio_files[0], "lenas", age_in_days, child_id,its_files) # create 100 wav chunks
+        create_wav_chunks(output_dir,chn100_timestamps, full_audio, audio_files[0], "lenas", age_in_days, child_id,its_files) # create 100 wav chunks
 #_______________________________________________________________________________
 
 if __name__ == "__main__":
-    #working_dir= "/Users/chiarasemenzin/Desktop/create_temp/sample_data/"
+    #working_dir= "/Users/chiarasemenzin/Desktop/create temp/sample_data/"
+    working_dir = sys.argv[1]
     output_dir=sys.argv[2]
+    nr_files=sys.argv[3]
     #output_dir="/Users/chiarasemenzin/Documents/Zooniverse-data/LAAC_20200418_ac1_intermediate/"
     spreadsheet = "def" # either name of corpus if the files have been renamed or the babblecorpus spreadsheet
     processed_files = []
+    print("Found files", os.listdir(working_dir))
     for filename in sorted(os.listdir(working_dir)):
         if (filename.endswith(".its") or filename.endswith(".rttm")) and filename not in processed_files:
             processed_files.append(filename)
@@ -221,5 +228,5 @@ if __name__ == "__main__":
                 if not os.path.exists(audio):
                     print("file {} does not have its corresponding audio in the same directory - please place all files in the same directory and name .its and .wav file the same way (if the .its file is called blabla.its, the .wav file should be called blabla.wav)".format(audio))
                     continue
-            process_one_file(output_dir,its_files, audio_files, os.path.join(working_dir,spreadsheet))
+            process_one_file(output_dir,its_files, audio_files, os.path.join(working_dir,spreadsheet),nr_files)
 

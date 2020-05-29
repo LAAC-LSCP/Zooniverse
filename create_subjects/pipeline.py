@@ -11,6 +11,7 @@ python = sys.executable
 infolder = config.infolder
 metadata="Metadata_{}.txt".format(config.dataset_name)
 working_dir=os.path.join(os.getcwd()+os.sep)
+nr_files=config.nr_files # int or "all"
 
 #intermfolder="{}/{}_intermediate/".format(config.outfolder,config.dataset_name)
 intermfolder=os.path.join(config.outfolder,config.dataset_name+"_intermediate"+os.sep)
@@ -28,10 +29,10 @@ os.makedirs(outfolder, exist_ok=True)
 # ----------------------------------------------------------------------------------------
 # Extract CHN chunks
 print("Extracting CHN chunks from recordings...")
-#cmd1 = "{} {}seg_original.py {} {}".format(python, working_dir, infolder, intermfolder, "def")
-cmd1 = [python, working_dir+"seg_original.py", infolder, intermfolder, "def"]
+
+cmd1 = [python, working_dir+"seg_original.py", infolder, intermfolder, str(nr_files), "def"]
 process=subprocess.Popen(cmd1,stdout=subprocess.PIPE)
-#os.system(cmd1)
+
 # ----------------------------------------------------------------------------------------
 
 # Extract clips
