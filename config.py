@@ -13,6 +13,10 @@ outfolder =  "/Users/example/Documents/Zooniverse-data/"
 # - an intermediate/ folder with extracted CHN chunks
 # - a data-for-upload/ folder with the final short clips
 
+nr_files = 10
+# Change the value of this variable to "all" if you want to extract all the CHN chunks to wavs
+# Otherwise specify an integer with to randomly subset a number of CHN chunks to extract
+
 dataset_name = "LAAC_20200418_ac1"
 # metadata filename, choose anything you'd like since it will be created in the process
 

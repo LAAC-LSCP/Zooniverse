@@ -47,8 +47,27 @@ def get_id(its_file):
     rec = re.findall(r'ChildKey=\"[\d\w]*\"', data)
     rec= rec[0].split("=")
     childkey=rec[1].strip('"')
-    #print("KEY: ",childkey)
     return childkey
+
+def get_id_new(its_file):
+    with open(its_file) as f:
+        data = f.read()
+    f.close()
+    rec = re.findall(r'ChildKey=\"[\w]*.*\"', data)
+    childkey=rec[0].split("=")[1].split("\"")[1]
+    return childkey
+
+def get_version(its_file):
+    with open(its_file) as f:
+        data = f.read()
+    f.close()
+    rec = re.findall(r'version=\"[\w]*.*\"', data)
+    vsn=rec[0].split("=")[1].split("\"")[1]
+    if vsn == "5.0.0":
+        vsn = "pro"
+    else:
+        vsn = "old"
+    return vsn
 
 #_______________________________________________________________________________
 
@@ -58,18 +77,21 @@ def load_audio(audio):
     fullAudio = AudioSegment.from_wav(audio)
     print("audio loaded in ", datetime.datetime.now()-init, " min.sec.ms")
     return fullAudio
+    
 #_______________________________________________________________________________
 
-def find_all_chn_amanda(data, id='CHN'):
-    print("finding chn timestamps")
-    list_timestamps = []
-    for i in data:
-        m1 = re.findall(r'spkr=\"CHN\"',i)
-        m2 = re.findall(r'startTime=\"PT([0-9]+\.[0-9]+)S\"', i)
-        m = re.findall(r'endTime=\"PT([0-9]+\.[0-9]+)?S\"', i)
+def find_all_chn_new(its_file, id='CHN'):
+    fileHandler = open(its_file, "r")
+    list_timestamps=[]
+    listOfLines = fileHandler.readlines()
+    for line in listOfLines:
+        m1 = re.findall(r'spkr=\"CHN\"', line)
+        m2 = re.findall(r'startTime=\"PT([0-9]+\.[0-9]+)S\"', line)
+        m = re.findall(r'endTime=\"PT([0-9]+\.[0-9]+)?S\"', line)
         if ((m1 != []) & (m != []) & (m2 != [])):
-            list_timestamps.append([m2[0],m[0]])
-    print("list of chn timestamps complete")
+            list_timestamps.append([m2[0], m[0]])
+    print(len(list_timestamps))
+    fileHandler.close()
     return list_timestamps
 
 def extract_time(text):
@@ -91,13 +113,26 @@ def find_all_chn(its_file, id="CHN"):
             chi_utt.append([onset, offset])
     return chi_utt
 
+def find_all_chn_rttm(rttm_file, id="CHI"):
+    timestamps=[]
+    fh = open(rttm_file)
+    for line in fh:
+        line=line.split(" ")
+        spkr=line[7].strip("!")
+        if id in spkr:
+            timestamps.append([float(line[3]),float(line[3])+float(line[4])])
+    print(timestamps)
+    fh.close()
+    return timestamps
+
+
 def check_dur(dur):
     if dur % 0.5 == 0:
-        #print(dur,"okay!\n")
+       # print(dur,"okay!\n")
         new_dur=dur
         remain=0
     else:
-        #print(dur,"\nchanging it")
+    #    print(dur,"\nchanging it")
         closest_int=int(round(dur))
         if closest_int>=dur:
             new_dur=float(closest_int)
@@ -122,7 +157,7 @@ def create_wav_chunks(output_dir, timestamps, full_audio, audio_file, corpus, ag
             onset=float(onset)-remain/2
             offset = float(offset) + remain/2
         new_audio_chunk = full_audio[float(onset)*1000:float(offset)*1000]
-        new_audio_chunk.export("{}_{}_{}_{}_{}_{}.wav".format(output_dir+corpus, child_id, str(age_in_days),its_name, onset, offset), format("wav"),bitrate="192k")
+        new_audio_chunk.export("{}_{}_{}_{}_{:.2f}_{:.2f}.wav".format(output_dir+corpus, child_id, str(age_in_days),its_name, onset, offset), format("wav"),bitrate="192k")
 #_______________________________________________________________________________
 
 def list_to_csv(list_ts, output_file): # to remember intermediaries
@@ -130,46 +165,62 @@ def list_to_csv(list_ts, output_file): # to remember intermediaries
     df.to_csv(output_file) # write dataframe to file
 #_______________________________________________________________________________
 
-def process_one_file(output_dir,its_files, audio_files, spreadsheet):
+def process_one_file(output_dir,its_files, audio_files, spreadsheet,nr_files):
     #print(its_files)
     # get information
-    child_id=get_id(its_files[0])
-    age_in_days = get_age_in_days(its_files[0])
-    # write metadata
+    vsn = get_version(its_files[0])
+    if its_files[0].endswith(".its"):
+        if vsn == "pro":
+            child_id=get_id_new(its_files[0])
+        else:
+            child_id=get_id(its_files[0])
+        age_in_days = get_age_in_days(its_files[0])
+    if its_files[0].endswith(".rttm"):
+        child_id="NaN"
+        age_in_days = "NaN"
     full_audio = AudioSegment.empty()
     for audio in audio_files:
         full_audio += load_audio(audio) # load each audio and add to full_audio
 
     all_chn_timestamps = []
     for its in its_files:
-        all_chn_timestamps += find_all_chn(its) # get child timestamps
+        if its.endswith(".its"):
+            if vsn == "pro":
+                all_chn_timestamps += find_all_chn_new(its)
+            else:
+                all_chn_timestamps += find_all_chn(its) # get child timestamps
+        elif its.endswith(".rttm"):
+            all_chn_timestamps += find_all_chn_rttm(its) # get child timestamps
     # randomly sample 100 items from the last list
-    chn100_timestamps = random.sample(all_chn_timestamps, min(100,len(all_chn_timestamps)))
+    #chn100_timestamps = random.sample(all_chn_timestamps, min(100,len(all_chn_timestamps)))
     if len(sys.argv)>2:
         list_to_csv(all_chn_timestamps, its_files[0][:-4]+"_all_chn_timestamps.csv")
+    if nr_files == "all":
+        create_wav_chunks(output_dir,all_chn_timestamps, full_audio, audio_files[0], "lenas", age_in_days, child_id,its_files) # create wav chunks for all chunks
+    else:
+        chn100_timestamps = random.sample(all_chn_timestamps, min(int(nr_files),len(all_chn_timestamps)))
         list_to_csv(chn100_timestamps, its_files[0][:-4]+"_chn_100_timestamps.csv")
-    create_wav_chunks(output_dir,chn100_timestamps, full_audio, audio_files[0], "lenas", age_in_days, child_id,its_files) # create 100 wav chunks
+        create_wav_chunks(output_dir,chn100_timestamps, full_audio, audio_files[0], "lenas", age_in_days, child_id,its_files) # create 100 wav chunks
 #_______________________________________________________________________________
 
 if __name__ == "__main__":
-    '''
-    TODO: add argparse
-    '''
+    #working_dir= "/Users/chiarasemenzin/Desktop/create temp/sample_data/"
     working_dir = sys.argv[1]
-    #working_dir= "/Users/chiarasemenzin/Desktop/create_temp/sample_data/"
     output_dir=sys.argv[2]
+    nr_files=sys.argv[3]
     #output_dir="/Users/chiarasemenzin/Documents/Zooniverse-data/LAAC_20200418_ac1_intermediate/"
-    spreadsheet = "def" # only change if using spreadsheet
+    spreadsheet = "def" # either name of corpus if the files have been renamed or the babblecorpus spreadsheet
     processed_files = []
+    print("Found files", os.listdir(working_dir))
     for filename in sorted(os.listdir(working_dir)):
-        if filename.endswith(".its") and filename not in processed_files:
+        if (filename.endswith(".its") or filename.endswith(".rttm")) and filename not in processed_files:
             processed_files.append(filename)
             its_files = [os.path.join(working_dir,filename)] # path to its file (path/to/file.its)
-            audio_files = [os.path.join(working_dir,filename[:-4]+".wav")] # path to audio file (path/to/audio_file.wav)
+            audio_files = [os.path.join(working_dir,filename[:-4]+".wav")] 
             # if there are several files from the same day
             if filename[-6]=='_':
                 for filename_other in os.listdir(working_dir):
-                    if filename_other.endswith('.its') and filename[:-6]==filename_other[:-6] and filename[-5]!=filename_other[-5]:
+                    if (filename_other.endswith('.its') or filename_other.endswith('.rttm')) and filename[:-6]==filename_other[:-6] and filename[-5]!=filename_other[-5]:
                         its_files.append(working_dir+"/"+filename_other)
                         audio_files.append(working_dir+"/"+filename_other[:-4]+".wav")
                         processed_files.append(filename_other)
@@ -177,6 +228,5 @@ if __name__ == "__main__":
                 if not os.path.exists(audio):
                     print("file {} does not have its corresponding audio in the same directory - please place all files in the same directory and name .its and .wav file the same way (if the .its file is called blabla.its, the .wav file should be called blabla.wav)".format(audio))
                     continue
-            process_one_file(output_dir,its_files, audio_files, os.path.join(working_dir,spreadsheet))
-
+            process_one_file(output_dir,its_files, audio_files, os.path.join(working_dir,spreadsheet),nr_files)
 
