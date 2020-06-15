@@ -122,7 +122,7 @@ def create_wav_chunks(output_dir, timestamps, full_audio, audio_file, corpus, ag
             onset=float(onset)-remain/2
             offset = float(offset) + remain/2
         new_audio_chunk = full_audio[float(onset)*1000:float(offset)*1000]
-        new_audio_chunk.export("{}_{}_{}_{}_{}_{}.wav".format(output_dir+corpus, child_id, str(age_in_days),its_name, onset, offset), format("wav"),bitrate="192k")
+        new_audio_chunk.export("{}__{}__{}__{}__{:.2f}__{:.2f}.wav".format(output_dir+corpus, child_id, str(age_in_days),its_name, onset, offset), format("wav"),bitrate="192k")
 #_______________________________________________________________________________
 
 def list_to_csv(list_ts, output_file): # to remember intermediaries
@@ -152,13 +152,9 @@ def process_one_file(output_dir,its_files, audio_files, spreadsheet):
 #_______________________________________________________________________________
 
 if __name__ == "__main__":
-    '''
-    TODO: add argparse
-    '''
     working_dir = sys.argv[1]
-    #working_dir= "/Users/chiarasemenzin/Desktop/create_temp/sample_data/"
     output_dir=sys.argv[2]
-    #output_dir="/Users/chiarasemenzin/Documents/Zooniverse-data/LAAC_20200418_ac1_intermediate/"
+#    nr_files=sys.argv[3]
     spreadsheet = "def" # only change if using spreadsheet
     processed_files = []
     for filename in sorted(os.listdir(working_dir)):
