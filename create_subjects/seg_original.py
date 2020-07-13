@@ -44,7 +44,7 @@ def get_id(its_file):
     with open(its_file) as f:
         data = f.read()
     f.close()
-    rec = re.findall(r'ChildKey=\"[\d\w]*\"', data)
+    rec = re.findall(r'ChildKey=\"[\d\w\.]*\"', data)
     rec= rec[0].split("=")
     childkey=rec[1].strip('"')
     return childkey
@@ -142,7 +142,7 @@ def check_dur(dur):
     return new_dur,remain
 #_______________________________________________________________________________
 
-def create_wav_chunks(output_dir, timestamps, full_audio, audio_file, corpus, age_in_days, child_id='child_id',its="its"):
+def create_wav_chunks(output_dir, timestamps, full_audio, corpus, age_in_days, child_id,its_files):
     print("creating wav chunks")
     for ts in timestamps:
         onset, offset = ts[0], ts[1]
@@ -156,6 +156,7 @@ def create_wav_chunks(output_dir, timestamps, full_audio, audio_file, corpus, ag
             new_dur,remain=check_dur(offset-onset)
             onset=float(onset)-remain/2
             offset = float(offset) + remain/2
+        #print("I'd be creating:{}_{}_{}_{}_{:.2f}_{:.2f}.wav".format(output_dir+corpus, child_id, str(age_in_days),its_name, onset, offset))
         new_audio_chunk = full_audio[float(onset)*1000:float(offset)*1000]
         new_audio_chunk.export("{}_{}_{}_{}_{:.2f}_{:.2f}.wav".format(output_dir+corpus, child_id, str(age_in_days),its_name, onset, offset), format("wav"),bitrate="192k")
 #_______________________________________________________________________________
@@ -163,6 +164,28 @@ def create_wav_chunks(output_dir, timestamps, full_audio, audio_file, corpus, ag
 def list_to_csv(list_ts, output_file): # to remember intermediaries
     df = pandas.DataFrame(list_ts, columns=["onset", "offset"]) # df of timestamps
     df.to_csv(output_file) # write dataframe to file
+
+
+def read_link(csv):
+    links=pandas.read_csv(csv)
+    dictionary=pandas.Series(links.FileName.values,index=links.ChildID).to_dict()
+    return dictionary
+
+def csv_to_chunks(csv_file,dictionary,separator=","):
+    file=pandas.read_csv(csv_file,separator)
+    print("I found {} child IDs.".format(len(file.ChildID.unique())))
+    for id in file.ChildID.unique():
+        print("Now processing {}".format(dictionary[id]))
+        wav=dictionary[id]+".wav"
+        current_child=file.loc[file['ChildID']==id] #this is the sub data frame
+        current_child['Startend'] = current_child[['Starttime', 'Endtime']].apply(tuple, axis=1)
+        create_wav_chunks(output_dir,
+                          list(current_child["Startend"]),
+                          wav,
+                          "corpus",
+                          str(current_child.Age.values[1]),
+                          id,
+                          dictionary[id]+".its")
 #_______________________________________________________________________________
 
 def process_one_file(output_dir,its_files, audio_files, spreadsheet,nr_files):
@@ -196,18 +219,19 @@ def process_one_file(output_dir,its_files, audio_files, spreadsheet,nr_files):
     if len(sys.argv)>2:
         list_to_csv(all_chn_timestamps, its_files[0][:-4]+"_all_chn_timestamps.csv")
     if nr_files == "all":
-        create_wav_chunks(output_dir,all_chn_timestamps, full_audio, audio_files[0], "lenas", age_in_days, child_id,its_files) # create wav chunks for all chunks
+        create_wav_chunks(output_dir,all_chn_timestamps, full_audio, "lenas", age_in_days, child_id,its_files) # create wav chunks for all chunks
     else:
         chn100_timestamps = random.sample(all_chn_timestamps, min(int(nr_files),len(all_chn_timestamps)))
         list_to_csv(chn100_timestamps, its_files[0][:-4]+"_chn_100_timestamps.csv")
-        create_wav_chunks(output_dir,chn100_timestamps, full_audio, audio_files[0], "lenas", age_in_days, child_id,its_files) # create 100 wav chunks
+        create_wav_chunks(output_dir,chn100_timestamps, full_audio, "lenas", age_in_days, child_id,its_files) # create 100 wav chunks
 #_______________________________________________________________________________
 
 if __name__ == "__main__":
-    #working_dir= "/Users/chiarasemenzin/Desktop/create temp/sample_data/"
+    #working_dir= "/Users/chiarasemenzin/Desktop/create_temp/sample_data/"
     working_dir = sys.argv[1]
     output_dir=sys.argv[2]
     nr_files=sys.argv[3]
+    #nr_files=10
     #output_dir="/Users/chiarasemenzin/Documents/Zooniverse-data/LAAC_20200418_ac1_intermediate/"
     spreadsheet = "def" # either name of corpus if the files have been renamed or the babblecorpus spreadsheet
     processed_files = []
@@ -228,5 +252,15 @@ if __name__ == "__main__":
                 if not os.path.exists(audio):
                     print("file {} does not have its corresponding audio in the same directory - please place all files in the same directory and name .its and .wav file the same way (if the .its file is called blabla.its, the .wav file should be called blabla.wav)".format(audio))
                     continue
-            process_one_file(output_dir,its_files, audio_files, os.path.join(working_dir,spreadsheet),nr_files)
+            process_one_file(output_dir,
+                             its_files,
+                             audio_files,
+                             os.path.join(working_dir,spreadsheet),
+                             nr_files)
+
+        if filename.endswith(".csv") and "timestamps" not in filename:
+            dictionary = read_link('/Users/chiarasemenzin/Desktop/zoon_metadata/filename_links.csv')
+            print(csv_to_chunks(working_dir+filename,
+                              dictionary))
+
 

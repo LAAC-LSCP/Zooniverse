@@ -31,13 +31,14 @@ os.makedirs(outfolder, exist_ok=True)
 print("Extracting CHN chunks from recordings...")
 
 cmd1 = [python, working_dir+"seg_original.py", infolder, intermfolder, str(nr_files), "def"]
-process=subprocess.Popen(cmd1,stdout=subprocess.PIPE)
+#process=subprocess.Popen(cmd1,stdout=subprocess.PIPE)
+subprocess.call(cmd1)
 
 # ----------------------------------------------------------------------------------------
 
 # Extract clips
 print("Trimming clips into 500ms chunks...")
-cmd2 = "{} {}extract_chunks.py -i {} -o {} -md {}".format(python, working_dir, intermfolder, outfolder, metadata)
+cmd2 = "{} {}extract_chunks.py -i \"{}\" -o \"{}\" -md {}".format(python, working_dir, intermfolder, outfolder, metadata)
 os.system(cmd2)
 
 # ----------------------------------------------------------------------------------------

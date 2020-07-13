@@ -45,7 +45,7 @@ def make_folder(outfolder, batch_idx):
     batch_outfolder = os.path.join(outfolder, md_filename.split(".")[0].strip("Metadata_")+"_batch_"+str(batch_idx))
     if not os.path.isdir(batch_outfolder):
         print("Creating batch folder number " + str(batch_idx))
-        os.system("mkdir {}".format(batch_outfolder))
+        os.system("mkdir \"{}\"".format(batch_outfolder))
     return batch_outfolder
 
 
