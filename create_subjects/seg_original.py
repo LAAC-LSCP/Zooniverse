@@ -191,8 +191,8 @@ def csv_to_chunks(csv_file,dictionary,separator=","):
 def process_one_file(output_dir,its_files, audio_files, spreadsheet,nr_files):
     #print(its_files)
     # get information
-    vsn = get_version(its_files[0])
     if its_files[0].endswith(".its"):
+        vsn = get_version(its_files[0])
         if vsn == "pro":
             child_id=get_id_new(its_files[0])
         else:
@@ -208,6 +208,7 @@ def process_one_file(output_dir,its_files, audio_files, spreadsheet,nr_files):
     all_chn_timestamps = []
     for its in its_files:
         if its.endswith(".its"):
+            vsn = get_version(its_files[0])
             if vsn == "pro":
                 all_chn_timestamps += find_all_chn_new(its)
             else:
