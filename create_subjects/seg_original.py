@@ -240,9 +240,13 @@ if __name__ == "__main__":
         if (filename.endswith(".its") or filename.endswith(".rttm")) and filename not in processed_files:
             processed_files.append(filename)
             its_files = [os.path.join(working_dir,filename)] # path to its file (path/to/file.its)
-            audio_files = [os.path.join(working_dir,filename[:-4]+".wav")] 
+            if (filename.endswith(".its"):
+                audio_files = [os.path.join(working_dir,filename[:-4]+".wav")] 
+            if (filename.endswith(".rttm"):
+                audio_files = [os.path.join(working_dir,filename[:-5]+".wav")] 
             # if there are several files from the same day
             if filename[-6]=='_':
+                print("I found several files from the same day! Processing.")
                 for filename_other in os.listdir(working_dir):
                     if (filename_other.endswith('.its') or filename_other.endswith('.rttm')) and filename[:-6]==filename_other[:-6] and filename[-5]!=filename_other[-5]:
                         its_files.append(working_dir+"/"+filename_other)
