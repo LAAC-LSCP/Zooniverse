@@ -74,7 +74,7 @@ def get_version(its_file):
 def load_audio(audio):
     init = datetime.datetime.now()
     print("loading audio")
-    fullAudio = AudioSegment.from_wav(audio)
+    fullAudio = AudioSegment.from_file(audio)
     print("audio loaded in ", datetime.datetime.now()-init, " min.sec.ms")
     return fullAudio
     
@@ -228,12 +228,6 @@ def process_one_file(output_dir,its_files, audio_files, spreadsheet,nr_files):
 #_______________________________________________________________________________
 
 if __name__ == "__main__":
-    #working_dir= "/Users/chiarasemenzin/Desktop/create_temp/sample_data/"
-    working_dir = sys.argv[1]
-    output_dir=sys.argv[2]
-    nr_files=sys.argv[3]
-    #nr_files=10
-    #output_dir="/Users/chiarasemenzin/Documents/Zooniverse-data/LAAC_20200418_ac1_intermediate/"
     spreadsheet = "def" # either name of corpus if the files have been renamed or the babblecorpus spreadsheet
     processed_files = []
     print("Found files", os.listdir(working_dir))

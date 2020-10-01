@@ -9,7 +9,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r cars}
 library(tidyverse)
-data_1 <- read_delim("first_classifications_last.csv", delim=',',col_types = cols(.default = "c"))
+data_1 <- read_delim("/Users/chiarasemenzin/zoon_classifs_sep8.csv", delim=',',col_types = cols(.default = "c"))
 nb_answers_new <- data_1 %>%
   group_by(AudioData) %>%
   count()
@@ -18,12 +18,12 @@ not_finished_new <- nb_answers_new %>%
   filter(n<=2)
 print(paste("Number of clips with at least one annotation missing:",nrow(not_finished_new)))
 three_answers_new <- nb_answers_new %>%
-  filter(n==3)
+  filter(n>=3)
 print(paste("Number of clips with three annotations:",nrow(three_answers_new)))
 
 ```
 ```{r cars}
-df <- read.csv("first_classifications_last.csv")
+df <- read_delim("/Users/chiarasemenzin/zoon_classifs_sep8.csv", delim=',',col_types = cols(.default = "c"))
 df.sub <- subset(df, Answer != "Junk" | Answer != "Crying" | Answer != "Laughing")
 
 ### By Age
@@ -72,6 +72,8 @@ n.non.can <- as.data.frame(df.sub %>% group_by(Age) %>% filter(Answer == "Non-Ca
 n.tot <- merge(n.can, n.non.can)
 n.tot$ratio.can <- n.tot$n.can/(n.tot$n.can + n.tot$n.non.can)
 n.tot$ratio.non.can <- n.tot$n.non.can/(n.tot$n.can + n.tot$n.non.can)
+n.tot$ratio.can<-as.numeric(as.character(n.tot$ratio.can))
+n.tot$ratio.non.can<-as.numeric(as.character(n.tot$ratio.non.can))
 plot(ratio.can~Age,data=n.tot)
 abline(lm(ratio.can~Age,data=n.tot))
 ```
